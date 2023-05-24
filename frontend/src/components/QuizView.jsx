@@ -26,6 +26,7 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment }) => {
   return (
     <StyledQuizView>
       <h2>{quiz.title}</h2>
+      <p>{quiz.questions.length} {quiz.questions.length === 1? 'question' : 'questions'}</p>
       <p>{quiz.likes} likes <Button onClick={() => addLike(quiz.id)}>like</Button></p>
       <p>Added by <Link to={`/users/${user.id}`} className='username'>{quiz.user.username}</Link></p>
       {quiz.user.username === user.username && <ButtonAlt onClick={

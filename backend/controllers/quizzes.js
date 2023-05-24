@@ -5,12 +5,17 @@ const Quiz = require('../models/quiz');
 const User = require('../models/user');
 
 quizzesRouter.get('/', async (request, response) => {
-  const quizzes = await Quiz.find({}).populate('user', { username: 1, name: 1 });
-  response.json(quizzes);
+  try {
+    const quizzes = await Quiz.find().populate('user', 'username _id');
+    response.json(quizzes);
+  } catch (error) {
+    response.status(500).json({ error: 'Internal server error' });
+  }
 });
 
+
 quizzesRouter.get('/:id', async (request, response) => {
-  const quiz = await Quiz.findById(request.params.id);
+  const quiz = await Quiz.findById(request.params.id).populate('user', 'username _id');
   if (quiz) {
     response.json(quiz);
   } else {
@@ -81,7 +86,6 @@ quizzesRouter.put('/:id', async (request, response) => {
 
   const quiz = {
     title: body.title,
-    author: body.author,
     likes: body.likes,
     user: body.user.id,
   };

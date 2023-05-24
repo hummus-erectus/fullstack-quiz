@@ -19,7 +19,7 @@ const User = ({ individualUser }) => {
           .filter((quiz) => quiz.user.id === user.id)
           .map((quiz) => (
             <li className='quiz' key={quiz.id}>
-              <Link to={`/quizzes/${quiz.id}`}><span className="quizTitle">{quiz.title}</span> by <span className="quizAuthor">{quiz.author}</span></Link>
+              <Link to={`/quizzes/${quiz.id}`}><span className="quizTitle">{quiz.title}</span></Link>
             </li>
           ))
         }

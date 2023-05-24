@@ -82,7 +82,7 @@ const App = () => {
     quizFormRef.current.toggleVisibility()
     try {
       await dispatch(createQuiz(quizObject))
-      dispatch(setNotification(`${quizObject.title} by ${quizObject.author} added`, 'success', 5))
+      dispatch(setNotification(`${quizObject.title} added`, 'success', 5))
     } catch (error) {
       dispatch(setNotification(error.message, 'error', 5))
     }
@@ -114,7 +114,7 @@ const App = () => {
     if (window.confirm(`Do you really want to delete ${quiz.title}?`)) {
       try {
         await dispatch(removeQuiz(id))
-        dispatch(setNotification(`Successfully removed ${quiz.title} by ${quiz.author}`, 'success', 5))
+        dispatch(setNotification(`Successfully removed ${quiz.title}`, 'success', 5))
       } catch (error) {
         dispatch(setNotification(error.message, 'error', 5))
       }

@@ -4,17 +4,14 @@ import { Form } from './styles/Form.styled'
 
 const QuizForm = ({ createQuiz }) => {
   const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
 
   const addQuiz = async (event) => {
     event.preventDefault()
     createQuiz({
       title: title,
-      author: author,
     })
 
     setTitle('')
-    setAuthor('')
   }
 
   return (
@@ -30,16 +27,6 @@ const QuizForm = ({ createQuiz }) => {
             value={title}
             name="Title"
             onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div className='input'>
-          author:
-          <input
-            id="authorInput"
-            type="text"
-            value={author}
-            name="Author"
-            onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <Button type="submit" className="submitButton">

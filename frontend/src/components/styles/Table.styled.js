@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const Table = styled.div`
+export const Table = styled.table`
     tbody tr {
         cursor: pointer;
     }

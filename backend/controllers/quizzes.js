@@ -51,7 +51,7 @@ quizzesRouter.post('/', async (request, response) => {
   user.quizzes = user.quizzes.concat(savedQuiz._id);
   await user.save();
 
-  const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', { username: 1, name: 1 });
+  const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id');
 
   response.status(201).json(populatedQuiz);
 });
@@ -91,10 +91,7 @@ quizzesRouter.put('/:id', async (request, response) => {
   };
 
   try {
-    const updatedQuiz = await Quiz.findByIdAndUpdate(request.params.id, quiz, { new: true }).populate(
-      'user',
-      { username: 1, name: 1 }
-    );
+    const updatedQuiz = await Quiz.findByIdAndUpdate(request.params.id, quiz, { new: true }).populate('user', 'username _id');
     response.json(updatedQuiz);
   } catch (error) {
     next(error);
@@ -117,9 +114,11 @@ quizzesRouter.post('/:id/comments', async (request, response) => {
   const comment = { content: body.content };
   quiz.comments.push(comment);
 
-  const savedQuiz = await quiz.save();
+  const savedQuiz = await quiz.save()
 
-  response.status(201).json(savedQuiz);
+  const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id');
+
+  response.status(201).json(populatedQuiz);
 });
 
 module.exports = quizzesRouter;

@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeQuizzes, createQuiz, newLike, removeQuiz, newComment } from './reducers/quizReducer'
+import { createQuestion } from './reducers/questionsReducer'
+// import { createQuestion, updateQuestionAction, removeQuestionAction } from './reducers/questionsReducer'
+
 import { removeUser, userLogin } from './reducers/userReducer'
 import { Routes, Route, useMatch } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
@@ -40,6 +43,7 @@ const App = () => {
   const quizzes = useSelector(({ quiz }) => quiz)
   const user = useSelector(({ user }) => user)
   const users = useSelector(({ users }) => users)
+  // const questions = useSelector(({ questions }) => questions)
 
   useEffect(() => {
     dispatch(initializeQuizzes())
@@ -109,7 +113,7 @@ const App = () => {
   }
 
   const deleteQuiz = async (id) => {
-    const quiz = quiz.find((n) => n.id === id)
+    const quiz = quizzes.find((n) => n.id === id)
 
     if (window.confirm(`Do you really want to delete ${quiz.title}?`)) {
       try {
@@ -121,15 +125,49 @@ const App = () => {
     }
   }
 
+  // Question dispatch functions
+
+  const addQuestion = async (quizId, questionObject) => {
+    try {
+      await dispatch(createQuestion(quizId, questionObject)) // Dispatch createQuestion action with quizId and questionObject
+      dispatch(setNotification('Question added', 'success', 5))
+    } catch (error) {
+      dispatch(setNotification(error.message, 'error', 5))
+    }
+  }
+
+  // const updateQuestion = async (questionId, updatedQuestion) => {
+  //   try {
+  //     await dispatch(updateQuestionAction(questionId, updatedQuestion)) // Dispatch updateQuestionAction with questionId and updatedQuestion
+  //     dispatch(setNotification('Question updated', 'success', 5))
+  //   } catch (error) {
+  //     dispatch(setNotification(error.message, 'error', 5))
+  //   }
+  // }
+
+  // const removeQuestion = async (questionId, quizId) => {
+  //   try {
+  //     await dispatch(removeQuestionAction(questionId, quizId)) // Dispatch removeQuestionAction with questionId and quizId
+  //     dispatch(setNotification('Question removed', 'success', 5))
+  //   } catch (error) {
+  //     dispatch(setNotification(error.message, 'error', 5))
+  //   }
+  // }
+
   const matchUser = useMatch('/users/:id')
   const individualUser = matchUser
     ? users.find(user => user.id === matchUser.params.id)
     : null
 
   const matchQuiz = useMatch('/quizzes/:id')
-  const individualQuiz = matchQuiz
-    ? quizzes.find(quiz => quiz.id === matchQuiz.params.id)
-    : null
+  const [individualQuiz, setIndividualQuiz] = useState(null)
+
+  useEffect(() => {
+    if (matchQuiz && quizzes.length > 0) {
+      const quiz = quizzes.find((quiz) => quiz.id === matchQuiz.params.id)
+      setIndividualQuiz(quiz)
+    }
+  }, [matchQuiz, quizzes])
 
   return (
     <ThemeProvider theme = { theme }>
@@ -163,7 +201,7 @@ const App = () => {
                 />
                 <Route path='/users' element={<Users />}/>
                 <Route path='/users/:id' element={<User individualUser={individualUser}/>}/>
-                <Route path='/quizzes/:id' element={<QuizView individualQuiz={individualQuiz} addLike={addLike} deleteQuiz={deleteQuiz} addComment={addComment}/>}/>
+                <Route path='/quizzes/:id' element={<QuizView individualQuiz={individualQuiz} addLike={addLike} deleteQuiz={deleteQuiz} addComment={addComment} addQuestion={addQuestion}/>}/>
 
               </Routes>
             </>

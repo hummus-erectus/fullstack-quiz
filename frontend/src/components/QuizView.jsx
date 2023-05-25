@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import Togglable from './Togglable'
 import { Button } from './styles/Button.styled'
 import { ButtonAlt } from './styles/ButtonAlt.styled'
 import { StyledQuizView } from './styles/QuizView.styled'
@@ -9,6 +10,11 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment }) => {
   const quiz = individualQuiz
   const user = useSelector(({ user }) => user)
   const navigate = useNavigate()
+  const questionFormRef = useRef()
+
+  // const showQuestionForm = () => {
+  //   questionFormRef.current.toggleVisibility()
+  // }
 
   const [comment, setComment] = useState('')
 
@@ -27,9 +33,12 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment }) => {
     <StyledQuizView>
       <h2>{quiz.title}</h2>
       <p>{quiz.questions.length} {quiz.questions.length === 1? 'question' : 'questions'}</p>
-      {quiz.user.username === user.username && <Button onClick={
-        () => console.log('Add new question')
-      }>Add question</Button>}
+
+      {quiz.user.username === user.username && <Togglable buttonLabel="Add Question" ref={questionFormRef}>
+        <p>Question form here</p>
+      </Togglable>}
+
+
       <p>{quiz.likes} likes <Button onClick={() => addLike(quiz.id)}>like</Button></p>
       <p>Added by <Link to={`/users/${user.id}`} className='username'>{quiz.user.username}</Link></p>
       {quiz.user.username === user.username && <ButtonAlt onClick={

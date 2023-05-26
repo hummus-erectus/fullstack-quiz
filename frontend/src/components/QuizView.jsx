@@ -42,26 +42,22 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading }
       <p>{quiz.questions.length} {quiz.questions.length === 1 ? 'question' : 'questions'}</p>
 
       {quiz.questions.length > 0 && (
-        <>
-          {isLoading ? (
-            <Togglable buttonLabel="See Questions">
-              <p>Loading questions...</p>
-            </Togglable>
+        <Togglable buttonLabel="See Questions">
+          {isLoading? (
+            <p>Loading questions...</p>
           ) : (
-            <Togglable buttonLabel="See Questions">
-              {questions.map((question) => (
-                <div key={question._id}>
-                  <p>{question.content}</p>
-                  <p>
-                    {question.options.map((option) => (
-                      <span key={option}>{option} </span>
-                    ))}
-                  </p>
-                </div>
-              ))}
-            </Togglable>
+            questions.map((question) => (
+              <div key={question._id}>
+                <p>{question.content}</p>
+                <p>
+                  {question.options.map((option) => (
+                    <span key={option}>{option} </span>
+                  ))}
+                </p>
+              </div>
+            ))
           )}
-        </>
+        </Togglable>
       )}
 
       {quiz.user.username === user.username && (

@@ -49,7 +49,7 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment }) => {
       <Togglable buttonLabel="See Questions">
         {questions.map(question =>
           (
-            <div key={question.id}>
+            <div key={question._id}>
               <p>{question.content}</p>
               <p>
                 {question.options.map(option => (

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import quizService from '../services/quizzes'
+import tokenService from '../services/tokenService'
 
 const userSlice = createSlice({
   name: 'user',
@@ -19,14 +19,14 @@ export const { setUser, removeUser } = userSlice.actions
 
 export const userLogin = (user) => {
   return dispatch => {
-    quizService.setToken(user.token)
+    tokenService.setToken(user.token)
     dispatch(setUser(user))
   }
 }
 
 export const userLogout = () => {
   return dispatch => {
-    quizService.removeToken()
+    tokenService.removeToken()
     dispatch(removeUser())
   }
 }

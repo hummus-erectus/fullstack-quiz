@@ -1,19 +1,18 @@
-import { useSelector,  } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import Togglable from './Togglable'
 import { Button } from './styles/Button.styled'
 import { ButtonAlt } from './styles/ButtonAlt.styled'
 import { StyledQuizView } from './styles/QuizView.styled'
-// import { initializeQuestions } from '../reducers/questionsReducer'
+import QuestionForm from './QuestionForm'
 
-const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading }) => {
+const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, addQuestion }) => {
   const quiz = individualQuiz
   const user = useSelector(({ user }) => user)
   const questions = useSelector(({ question }) => question)
   const navigate = useNavigate()
   const questionFormRef = useRef()
-  // const dispatch = useDispatch()
 
   const [comment, setComment] = useState('')
 
@@ -23,29 +22,23 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading }
     setComment('')
   }
 
-  useEffect(() => {
-    console.log('Questions:', questions)
-  }, [questions])
-
-  useEffect(() => {
-    console.log('Individual  quiz:', individualQuiz)
-  }, [individualQuiz])
-
-
   if (!quiz) {
     return null
   }
 
+  if (isLoading) {
+    return <p>Loading quiz...</p>
+  }
+
+
   return (
     <StyledQuizView>
       <h2>{quiz.title}</h2>
-      <p>{quiz.questions.length} {quiz.questions.length === 1 ? 'question' : 'questions'}</p>
+      <p>{questions.length} {questions.length === 1 ? 'question' : 'questions'}</p>
 
-      {quiz.questions.length > 0 && (
+      {questions.length > 0 && (
         <Togglable buttonLabel="See Questions">
-          {isLoading? (
-            <p>Loading questions...</p>
-          ) : (
+          {
             questions.map((question) => (
               <div key={question._id}>
                 <p>{question.content}</p>
@@ -56,13 +49,13 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading }
                 </p>
               </div>
             ))
-          )}
+          }
         </Togglable>
       )}
 
       {quiz.user.username === user.username && (
         <Togglable buttonLabel="Add Question" ref={questionFormRef}>
-          <p>Question form here</p>
+          <QuestionForm addQuestion={addQuestion} quizId={quiz.id}/>
         </Togglable>
       )}
 

@@ -2,10 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeQuizzes, createQuiz, newLike, removeQuiz, newComment } from './reducers/quizReducer'
-import { createQuestion } from './reducers/questionsReducer'
-import { initializeQuestions } from './reducers/questionsReducer'
+import { createQuestion, initializeQuestions } from './reducers/questionsReducer'
 
-// import { createQuestion, updateQuestionAction, removeQuestionAction } from './reducers/questionsReducer'
+// import { updateQuestionAction, removeQuestionAction } from './reducers/questionsReducer'
 
 import { removeUser, userLogin } from './reducers/userReducer'
 import { Routes, Route, useMatch } from 'react-router-dom'
@@ -14,6 +13,7 @@ import QuizForm from './components/QuizForm'
 import QuizList from './components/QuizList'
 import Togglable from './components/Togglable'
 import loginService from './services/login'
+import tokenService from './services/tokenService'
 import Notification from './components/Notification'
 import Users from './components/Users'
 import User from './components/User'
@@ -74,6 +74,7 @@ const App = () => {
       await dispatch(userLogin(user))
       setUsername('')
       setPassword('')
+      tokenService.setToken(user.token)
     } catch (exception) {
       dispatch(setNotification('Wrong username or password', 'error', 5))
     }

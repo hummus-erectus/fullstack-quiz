@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { initializeQuizzes, createQuiz, newLike, removeQuiz, newComment } from './reducers/quizReducer'
-import { createQuestion, initializeQuestions } from './reducers/questionsReducer'
+import { createQuestion, initializeQuestions, removeQuestionAction } from './reducers/questionsReducer'
 
-// import { updateQuestionAction, removeQuestionAction } from './reducers/questionsReducer'
+// import { updateQuestionAction } from './reducers/questionsReducer'
 
 import { removeUser, userLogin } from './reducers/userReducer'
 import { Routes, Route, useMatch } from 'react-router-dom'
@@ -148,14 +148,14 @@ const App = () => {
   //   }
   // }
 
-  // const removeQuestion = async (questionId, quizId) => {
-  //   try {
-  //     await dispatch(removeQuestionAction(questionId, quizId)) // Dispatch removeQuestionAction with questionId and quizId
-  //     dispatch(setNotification('Question removed', 'success', 5))
-  //   } catch (error) {
-  //     dispatch(setNotification(error.message, 'error', 5))
-  //   }
-  // }
+  const removeQuestion = async (questionId, quizId) => {
+    try {
+      await dispatch(removeQuestionAction(questionId, quizId)) // Dispatch removeQuestionAction with questionId and quizId
+      dispatch(setNotification('Question removed', 'success', 5))
+    } catch (error) {
+      dispatch(setNotification(error.message, 'error', 5))
+    }
+  }
 
   const matchUser = useMatch('/users/:id')
   const individualUser = matchUser
@@ -233,7 +233,17 @@ const App = () => {
                 />
                 <Route path='/users' element={<Users />}/>
                 <Route path='/users/:id' element={<User individualUser={individualUser}/>}/>
-                <Route path='/quizzes/:id' element={<QuizView individualQuiz={individualQuiz} addLike={addLike} deleteQuiz={deleteQuiz} addComment={addComment} addQuestion={addQuestion} isLoading={isLoadingQuestions}/>}/>
+                <Route path='/quizzes/:id' element={
+                  <QuizView
+                    individualQuiz={individualQuiz}
+                    isLoading={isLoadingQuestions}
+                    addLike={addLike}
+                    deleteQuiz={deleteQuiz}
+                    addComment={addComment}
+                    addQuestion={addQuestion}
+                    removeQuestion={removeQuestion}
+                  />
+                }/>
 
               </Routes>
             </>

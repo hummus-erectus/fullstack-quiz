@@ -20,7 +20,7 @@ const questionSlice = createSlice({
     },
     removeQuestion(state, action) {
       const id = action.payload.id
-      return state.filter((question) => question.id !== id)
+      return state.filter((question) => question._id !== id)
     },
   },
 })

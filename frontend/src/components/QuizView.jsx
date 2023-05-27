@@ -7,7 +7,7 @@ import { ButtonAlt } from './styles/ButtonAlt.styled'
 import { StyledQuizView } from './styles/QuizView.styled'
 import QuestionForm from './QuestionForm'
 
-const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, addQuestion }) => {
+const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, addQuestion, removeQuestion }) => {
   const quiz = individualQuiz
   const user = useSelector(({ user }) => user)
   const questions = useSelector(({ question }) => question)
@@ -47,6 +47,9 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, 
                     <span key={option}>{option} </span>
                   ))}
                 </p>
+                {quiz.user.username === user.username &&
+                  <Button onClick={() => removeQuestion(question._id, quiz.id)}>Remove Question</Button>
+                }
               </div>
             ))
           }

@@ -2,7 +2,12 @@ const mongoose = require('mongoose');
 
 const questionSchema = new mongoose.Schema({
   content: String,
-  options: [String],
+  options: [
+    {
+      optionId: Number,
+      content: String
+    }
+  ],
   correctAnswer: Number,
   quizzes: [
     {

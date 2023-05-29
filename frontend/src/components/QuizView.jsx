@@ -6,6 +6,7 @@ import { Button } from './styles/Button.styled'
 import { ButtonAlt } from './styles/ButtonAlt.styled'
 import { StyledQuizView } from './styles/QuizView.styled'
 import QuestionForm from './QuestionForm'
+import PlayQuiz from './PlayQuiz'
 
 const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, addQuestion, removeQuestion }) => {
   const quiz = individualQuiz
@@ -13,6 +14,8 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, 
   const questions = useSelector(({ question }) => question)
   const navigate = useNavigate()
   const questionFormRef = useRef()
+
+  const [startQuiz, setStartQuiz] = useState(false)
 
   const [comment, setComment] = useState('')
 
@@ -30,11 +33,21 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, 
     return <p>Loading quiz...</p>
   }
 
+  const handleStartQuiz = () => {
+    setStartQuiz(true)
+  }
+
+  if (startQuiz) {
+    return <PlayQuiz questions={questions} />
+  }
+
 
   return (
     <StyledQuizView>
       <h2>{quiz.title}</h2>
       <p>{questions.length} {questions.length === 1 ? 'question' : 'questions'}</p>
+
+      <Button onClick={handleStartQuiz}>Start Quiz</Button>
 
       {questions.length > 0 && (
         <Togglable buttonLabel="See Questions">

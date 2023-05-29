@@ -4,7 +4,7 @@ import { Button } from './styles/Button.styled'
 const QuestionForm = ({ addQuestion, quizId }) => {
   const [question, setQuestion] = useState('')
   const [correctAnswer, setCorrectAnswer] = useState('')
-  const [incorrectAnswers, setIncorrectAnswers] = useState(['', '', ''])
+  const [incorrectAnswers, setIncorrectAnswers] = useState([{ optionId: 2, content: '' }])
 
   const handleCorrectAnswerChange = (value) => {
     setCorrectAnswer(value)
@@ -12,13 +12,14 @@ const QuestionForm = ({ addQuestion, quizId }) => {
 
   const handleIncorrectAnswerChange = (index, value) => {
     const updatedIncorrectAnswers = [...incorrectAnswers]
-    updatedIncorrectAnswers[index] = value
+    updatedIncorrectAnswers[index].content = value
     setIncorrectAnswers(updatedIncorrectAnswers)
   }
 
   const handleAddIncorrectAnswer = () => {
     if (incorrectAnswers.length < 10) {
-      setIncorrectAnswers([...incorrectAnswers, ''])
+      const newOptionId = incorrectAnswers.length + 2
+      setIncorrectAnswers([...incorrectAnswers, { optionId: newOptionId, content: '' }])
     }
   }
 
@@ -32,7 +33,7 @@ const QuestionForm = ({ addQuestion, quizId }) => {
     event.preventDefault()
 
     // Remove empty incorrect answers
-    const filteredIncorrectAnswers = incorrectAnswers.filter((answer) => answer.trim() !== '')
+    const filteredIncorrectAnswers = incorrectAnswers.filter((answer) => answer.content.trim() !== '')
 
     // Check if there are at least two options (one correct answer and one incorrect answer)
     if (correctAnswer.trim() === '' || filteredIncorrectAnswers.length < 1) {
@@ -41,16 +42,20 @@ const QuestionForm = ({ addQuestion, quizId }) => {
       return
     }
 
-    const options = [correctAnswer, ...filteredIncorrectAnswers]
+    const options = [
+      { optionId: 1, content: correctAnswer },
+      ...filteredIncorrectAnswers,
+    ]
 
     addQuestion(quizId, {
       content: question,
       options: options,
+      correctAnswer: 1
     })
 
     setQuestion('')
     setCorrectAnswer('')
-    setIncorrectAnswers(['', '', ''])
+    setIncorrectAnswers([{ optionId: 1, content: '' }])
   }
 
   return (
@@ -77,10 +82,10 @@ const QuestionForm = ({ addQuestion, quizId }) => {
           <div key={index}>
             <input
               type="text"
-              value={answer}
+              value={answer.content}
               onChange={(event) => handleIncorrectAnswerChange(index, event.target.value)}
             />
-            {index >0 && (
+            {index > 0 && (
               <Button type="button" onClick={() => handleRemoveIncorrectAnswer(index)}>
                 Remove
               </Button>

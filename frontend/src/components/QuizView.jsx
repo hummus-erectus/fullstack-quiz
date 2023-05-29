@@ -57,7 +57,7 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, 
                 <p>{question.content}</p>
                 <p>
                   {question.options.map((option) => (
-                    <span key={option}>{option} </span>
+                    <span key={option.optionId}>{option.content} </span>
                   ))}
                 </p>
                 {quiz.user.username === user.username &&

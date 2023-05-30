@@ -56,13 +56,14 @@ const PlayQuiz = ({ questions }) => {
   }
 
   const renderOptions = () => {
-    return shuffledOptions.map((option) => (
+    const optionLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    return shuffledOptions.map((option, index) => (
       <button
         key={option._id}
         onClick={() => handleAnswerClick(option.optionId)}
         disabled={showFeedback}
       >
-        {option.content}
+        {optionLetters[index]}. {option.content}
       </button>
     ))
   }

@@ -5,7 +5,7 @@ const User = require('../models/user')
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
 
 usersRouter.post('/', async (request, response) => {
-  const { username, name, password } = request.body
+  const { username, password } = request.body
 
   if (!password) {
     return response.status(400).json({ error: 'You must provide a password' })
@@ -24,7 +24,6 @@ usersRouter.post('/', async (request, response) => {
 
   const user = new User({
     username,
-    name,
     passwordHash,
   })
 

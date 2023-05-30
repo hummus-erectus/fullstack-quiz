@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Togglable from './Togglable'
 import { Button } from './styles/Button.styled'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 const PlayQuiz = ({ questions }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -8,6 +9,89 @@ const PlayQuiz = ({ questions }) => {
   const [showFeedback, setShowFeedback] = useState(false)
   const [userAnswers, setUserAnswers] = useState([])
   const [shuffledOptions, setShuffledOptions] = useState([])
+
+  SpeechRecognition.startListening({ continuous: true })
+
+  const optionLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+  const commands = [
+    {
+      command: 'Next question',
+      callback: () => {
+        if (showFeedback && !isLastQuestion) {
+          handleNextQuestion()
+        }
+      },
+      isFuzzyMatch: true,
+      fuzzyMatchingThreshold: 0.5
+    },
+    {
+      command: 'See results',
+      callback: () => {
+        if (showFeedback && isLastQuestion) {
+          handleNextQuestion()
+        }
+      },
+      isFuzzyMatch: true,
+      fuzzyMatchingThreshold: 0.5
+    },
+    {
+      command: 'Retry Quiz',
+      callback: () => {
+        if (currentQuestionIndex === -1) {
+          handleRetryQuiz()
+        }
+      },
+      isFuzzyMatch: true,
+      fuzzyMatchingThreshold: 0.5
+    },
+    {
+      command: 'hey',
+      callback: () => {
+        if (!showFeedback && currentQuestion) {
+          const optionLettersArray = optionLetters.split('') // Convert optionLetters to an array
+          const optionIndex = optionLettersArray.findIndex((letter) => letter.toLowerCase() === 'a')
+          if (optionIndex !== -1) {
+            const optionId = shuffledOptions[optionIndex].optionId
+            handleAnswerClick(optionId)
+          }
+        }
+      },
+      isFuzzyMatch: true,
+      fuzzyMatchingThreshold: 0.5
+    },
+    {
+      command: 'see',
+      callback: () => {
+        if (!showFeedback && currentQuestion) {
+          const optionLettersArray = optionLetters.split('') // Convert optionLetters to an array
+          const optionIndex = optionLettersArray.findIndex((letter) => letter.toLowerCase() === 'c')
+          if (optionIndex !== -1) {
+            const optionId = shuffledOptions[optionIndex].optionId
+            handleAnswerClick(optionId)
+          }
+        }
+      },
+      isFuzzyMatch: true,
+      fuzzyMatchingThreshold: 0.5
+    },
+    ...shuffledOptions.map((option, index) => ({
+      command: optionLetters[index].toLowerCase(),
+      callback: () => {
+        if (!showFeedback) {
+          handleAnswerClick(option.optionId)
+        }
+      },
+      isFuzzyMatch: true,
+      fuzzyMatchingThreshold: 0.2
+    }))
+  ]
+
+  const { transcript } = useSpeechRecognition({ commands })
+
+  useEffect(() => {
+    console.log(transcript)
+  }, [transcript])
 
   useEffect(() => {
     if(currentQuestionIndex !== -1){
@@ -56,7 +140,6 @@ const PlayQuiz = ({ questions }) => {
   }
 
   const renderOptions = () => {
-    const optionLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     return shuffledOptions.map((option, index) => (
       <button
         key={option._id}
@@ -67,6 +150,7 @@ const PlayQuiz = ({ questions }) => {
       </button>
     ))
   }
+
 
   const renderFeedback = () => {
     const { options, correctAnswer } = currentQuestion

@@ -23,6 +23,8 @@ import Navigation from './components/Navigation'
 import GlobalStyles from './components/styles/Global'
 import { ThemeProvider } from 'styled-components'
 import { Container } from './components/styles/Container.styled'
+import SignUpForm from './components/SignUpForm'
+import { Button } from './components/styles/Button.styled'
 
 const theme = {
   colors: {
@@ -39,6 +41,7 @@ const theme = {
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [showLoginForm, setShowLoginForm] = useState(true) // New state for login/signup form toggle
 
   const quizFormRef = useRef()
   const dispatch = useDispatch()
@@ -84,6 +87,9 @@ const App = () => {
     window.localStorage.removeItem('loggedQuizUser')
     dispatch(removeUser(null))
   }
+
+  const handleSignUp = () => setShowLoginForm(true)
+
 
   const addQuiz = async (quizObject) => {
     quizFormRef.current.toggleVisibility()
@@ -202,21 +208,34 @@ const App = () => {
   }, [individualQuiz])
 
   return (
-    <ThemeProvider theme = { theme }>
+    <ThemeProvider theme={theme}>
       <>
         <GlobalStyles />
-        {user && <Navigation user={user} handleLogout={handleLogout}/>}
+        {user && <Navigation user={user} handleLogout={handleLogout} />}
         <Notification />
         <Container>
           <h1>Quiz App</h1>
-          {user === null ? (
-            <LoginForm
-              username={username}
-              password={password}
-              handleUsernameChange={({ target }) => setUsername(target.value)}
-              handlePasswordChange={({ target }) => setPassword(target.value)}
-              handleSubmit={handleLogin}
-            />
+          {!user ? ( // Render login form or signup form based on user state
+            <>
+              {!showLoginForm && (
+                <>
+                  <SignUpForm handleSignUp={handleSignUp} />
+                  <Button onClick={() => setShowLoginForm(true)}>Login</Button> {/* Toggle to show login form */}
+                </>
+              )}
+              {showLoginForm && (
+                <>
+                  <LoginForm
+                    username={username}
+                    password={password}
+                    handleUsernameChange={({ target }) => setUsername(target.value)}
+                    handlePasswordChange={({ target }) => setPassword(target.value)}
+                    handleSubmit={handleLogin}
+                  />
+                  <Button onClick={() => setShowLoginForm(false)}>Sign up</Button> {/* Toggle to show signup form */}
+                </>
+              )}
+            </>
           ) : (
             <>
               <Routes>

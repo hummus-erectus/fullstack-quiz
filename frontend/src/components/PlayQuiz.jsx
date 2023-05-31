@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Togglable from './Togglable'
 import { Button } from './styles/Button.styled'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+import { useNavigate } from 'react-router-dom'
 
 const PlayQuiz = ({ questions }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -13,6 +14,7 @@ const PlayQuiz = ({ questions }) => {
   SpeechRecognition.startListening({ continuous: true })
 
   const optionLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const navigate = useNavigate()
 
   const commands = [
     {
@@ -46,11 +48,36 @@ const PlayQuiz = ({ questions }) => {
       fuzzyMatchingThreshold: 0.5
     },
     {
+      command: 'New Quiz',
+      callback: () => {
+        if (currentQuestionIndex === -1) {
+          handleNewQuiz()
+        }
+      },
+      isFuzzyMatch: true,
+      fuzzyMatchingThreshold: 0.5
+    },
+    {
       command: 'hey',
       callback: () => {
         if (!showFeedback && currentQuestion) {
           const optionLettersArray = optionLetters.split('') // Convert optionLetters to an array
           const optionIndex = optionLettersArray.findIndex((letter) => letter.toLowerCase() === 'a')
+          if (optionIndex !== -1) {
+            const optionId = shuffledOptions[optionIndex].optionId
+            handleAnswerClick(optionId)
+          }
+        }
+      },
+      isFuzzyMatch: true,
+      fuzzyMatchingThreshold: 0.5
+    },
+    {
+      command: 'be',
+      callback: () => {
+        if (!showFeedback && currentQuestion) {
+          const optionLettersArray = optionLetters.split('') // Convert optionLetters to an array
+          const optionIndex = optionLettersArray.findIndex((letter) => letter.toLowerCase() === 'b')
           if (optionIndex !== -1) {
             const optionId = shuffledOptions[optionIndex].optionId
             handleAnswerClick(optionId)
@@ -138,6 +165,14 @@ const PlayQuiz = ({ questions }) => {
     setShowFeedback(false)
     setUserAnswers([])
   }
+  const handleNewQuiz = () => {
+    setCurrentQuestionIndex(0)
+    setScore(0)
+    setUserAnswers([])
+    setShowFeedback(false)
+    setUserAnswers([])
+    navigate('/')
+  }
 
   const renderOptions = () => {
     return shuffledOptions.map((option, index) => (
@@ -184,6 +219,8 @@ const PlayQuiz = ({ questions }) => {
         <p>Your score: {score}/{totalQuestions}</p>
 
         <Button onClick={handleRetryQuiz}>Retry Quiz</Button>
+        <Button onClick={handleNewQuiz}>New Quiz</Button>
+
         {incorrectAnswers.length > 0 && (
           <div>
             <Togglable buttonLabel="See Incorrect Answers">

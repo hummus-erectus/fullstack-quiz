@@ -37,7 +37,7 @@ const Users = () => {
         <tbody>
           {users.map((user) => (
             <tr key={user.id} onClick={() => handleRowClick(user.id)}>
-              <td className='username'>{user.name}</td>
+              <td className='username'>{user.username}</td>
               <td className='count'>{user.quizzes.length}</td>
             </tr>
           ))}

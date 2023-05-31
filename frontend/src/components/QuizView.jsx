@@ -47,26 +47,28 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, 
       <h2>{quiz.title}</h2>
       <p>{questions.length} {questions.length === 1 ? 'question' : 'questions'}</p>
 
-      <Button onClick={handleStartQuiz}>Start Quiz</Button>
 
       {questions.length > 0 && (
-        <Togglable buttonLabel="See Questions">
-          {
-            questions.map((question) => (
-              <div key={question._id}>
-                <p>{question.content}</p>
-                <p>
-                  {question.options.map((option) => (
-                    <span key={option.optionId}>{option.content} </span>
-                  ))}
-                </p>
-                {quiz.user.username === user.username &&
-                  <Button onClick={() => removeQuestion(question._id, quiz.id)}>Remove Question</Button>
-                }
-              </div>
-            ))
-          }
-        </Togglable>
+        <>
+          <Button onClick={handleStartQuiz}>Start Quiz</Button>
+          <Togglable buttonLabel="See Questions">
+            {
+              questions.map((question) => (
+                <div key={question._id}>
+                  <p>{question.content}</p>
+                  <p>
+                    {question.options.map((option) => (
+                      <span key={option.optionId}>{option.content} </span>
+                    ))}
+                  </p>
+                  {quiz.user.username === user.username &&
+                    <Button onClick={() => removeQuestion(question._id, quiz.id)}>Remove Question</Button>
+                  }
+                </div>
+              ))
+            }
+          </Togglable>
+        </>
       )}
 
       {quiz.user.username === user.username && (

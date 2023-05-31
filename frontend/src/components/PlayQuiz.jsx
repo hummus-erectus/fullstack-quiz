@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Togglable from './Togglable'
 import { Button } from './styles/Button.styled'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
@@ -15,6 +15,7 @@ const PlayQuiz = ({ questions }) => {
 
   const optionLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   const navigate = useNavigate()
+  const togglableRef = useRef(null)
 
   const commands = [
     {
@@ -97,6 +98,26 @@ const PlayQuiz = ({ questions }) => {
             const optionId = shuffledOptions[optionIndex].optionId
             handleAnswerClick(optionId)
           }
+        }
+      },
+      isFuzzyMatch: true,
+      fuzzyMatchingThreshold: 0.5
+    },
+    {
+      command: 'See Incorrect Answers',
+      callback: () => {
+        if (!togglableRef.current.isVisible()) {
+          togglableRef.current.toggleVisibility()
+        }
+      },
+      isFuzzyMatch: true,
+      fuzzyMatchingThreshold: 0.5
+    },
+    {
+      command: 'Cancel',
+      callback: () => {
+        if (togglableRef.current.isVisible()) {
+          togglableRef.current.toggleVisibility()
         }
       },
       isFuzzyMatch: true,
@@ -223,7 +244,7 @@ const PlayQuiz = ({ questions }) => {
 
         {incorrectAnswers.length > 0 && (
           <div>
-            <Togglable buttonLabel="See Incorrect Answers">
+            <Togglable buttonLabel="See Incorrect Answers" ref={togglableRef}>
               {incorrectAnswers.map((answer) => {
                 const question = questions.find((q) => q._id === answer.questionId)
                 const selectedOption = question.options.find(

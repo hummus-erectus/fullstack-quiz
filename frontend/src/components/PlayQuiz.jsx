@@ -19,7 +19,7 @@ const PlayQuiz = ({ questions }) => {
 
   const commands = [
     {
-      command: 'Next question',
+      command: ['Next question', 'Next'],
       callback: () => {
         if (showFeedback && !isLastQuestion) {
           handleNextQuestion()
@@ -29,7 +29,7 @@ const PlayQuiz = ({ questions }) => {
       fuzzyMatchingThreshold: 0.5
     },
     {
-      command: 'See results',
+      command: ['See results', 'Results'],
       callback: () => {
         if (showFeedback && isLastQuestion) {
           handleNextQuestion()
@@ -39,24 +39,24 @@ const PlayQuiz = ({ questions }) => {
       fuzzyMatchingThreshold: 0.5
     },
     {
-      command: 'Retry Quiz',
+      command: ['Retry Quiz', 'Retry'],
       callback: () => {
         if (currentQuestionIndex === -1) {
           handleRetryQuiz()
         }
       },
       isFuzzyMatch: true,
-      fuzzyMatchingThreshold: 0.5
+      fuzzyMatchingThreshold: 0.8
     },
     {
-      command: 'New Quiz',
+      command: ['New Quiz', 'New'],
       callback: () => {
         if (currentQuestionIndex === -1) {
           handleNewQuiz()
         }
       },
       isFuzzyMatch: true,
-      fuzzyMatchingThreshold: 0.5
+      fuzzyMatchingThreshold: 0.8
     },
     {
       command: 'hey',
@@ -106,27 +106,27 @@ const PlayQuiz = ({ questions }) => {
     {
       command: 'See Incorrect Answers',
       callback: () => {
-        if (!togglableRef.current.isVisible()) {
+        if (currentQuestionIndex === -1 && !togglableRef.current.isVisible()) {
           togglableRef.current.toggleVisibility()
         }
       },
       isFuzzyMatch: true,
-      fuzzyMatchingThreshold: 0.5
+      fuzzyMatchingThreshold: 0.2
     },
     {
       command: 'Cancel',
       callback: () => {
-        if (togglableRef.current.isVisible()) {
+        if (currentQuestionIndex === -1 && togglableRef.current.isVisible()) {
           togglableRef.current.toggleVisibility()
         }
       },
       isFuzzyMatch: true,
-      fuzzyMatchingThreshold: 0.5
+      fuzzyMatchingThreshold: 0.2
     },
     ...shuffledOptions.map((option, index) => ({
       command: optionLetters[index].toLowerCase(),
       callback: () => {
-        if (!showFeedback) {
+        if (!showFeedback && currentQuestion) {
           handleAnswerClick(option.optionId)
         }
       },
@@ -197,13 +197,13 @@ const PlayQuiz = ({ questions }) => {
 
   const renderOptions = () => {
     return shuffledOptions.map((option, index) => (
-      <button
+      <Button
         key={option._id}
         onClick={() => handleAnswerClick(option.optionId)}
         disabled={showFeedback}
       >
         {optionLetters[index]}. {option.content}
-      </button>
+      </Button>
     ))
   }
 
@@ -223,9 +223,9 @@ const PlayQuiz = ({ questions }) => {
           </p>
         )}
         {isLastQuestion ? (
-          <button onClick={handleNextQuestion}>See Results</button>
+          <Button onClick={handleNextQuestion}>See Results</Button>
         ) : (
-          <button onClick={handleNextQuestion}>Next Question</button>
+          <Button onClick={handleNextQuestion}>Next Question</Button>
         )}
       </div>
     )

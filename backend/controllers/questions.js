@@ -7,7 +7,7 @@ const Question = require('../models/question');
 
 questionsRouter.post('/:quizId', async (request, response) => {
   const quizId = request.params.quizId;
-  const { content, options, correctAnswer } = request.body;
+  const { questions } = request.body;
 
   const token = request.token;
   const decodedToken = jwt.verify(token, config.SECRET);
@@ -24,21 +24,31 @@ questionsRouter.post('/:quizId', async (request, response) => {
     return response.status(403).json({ error: 'Not authorized to add questions to this quiz' });
   }
 
-  const question = new Question({
-    content: content,
-    options: options,
-    correctAnswer: correctAnswer,
-    quizzes: [quiz._id], // Associate the question with the current quiz
-    user: decodedToken.id // Set the user field to the ID of the logged-in user
-  });
+  const newQuestions = [];
 
-  const savedQuestion = await question.save();
+  for (const questionData of questions) {
+    const { content, options, correctAnswer } = questionData;
 
-  quiz.questions.push(savedQuestion._id); // Add the question reference to the quiz's questions array
+    const question = new Question({
+      content: content,
+      options: options,
+      correctAnswer: correctAnswer,
+      quizzes: [quiz._id], // Associate the question with the current quiz
+      user: decodedToken.id // Set the user field to the ID of the logged-in user
+    });
+
+    const savedQuestion = await question.save();
+
+    quiz.questions.push(savedQuestion._id); // Add the question reference to the quiz's questions array
+
+    newQuestions.push(savedQuestion);
+  }
+
   await quiz.save();
 
-  response.status(201).json(savedQuestion);
+  response.status(201).json(newQuestions);
 });
+
 
 
 questionsRouter.get('/:quizId', async (request, response) => {

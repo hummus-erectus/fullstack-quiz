@@ -48,9 +48,13 @@ const QuestionForm = ({ addQuestion, quizId }) => {
     ]
 
     addQuestion(quizId, {
-      content: question,
-      options: options,
-      correctAnswer: 1
+      questions: [
+        {
+          content: question,
+          options: options,
+          correctAnswer: 1
+        }
+      ]
     })
 
     setQuestion('')

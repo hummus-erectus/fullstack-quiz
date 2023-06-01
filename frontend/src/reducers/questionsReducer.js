@@ -9,7 +9,8 @@ const questionSlice = createSlice({
       return action.payload
     },
     appendQuestion(state, action) {
-      state.push(action.payload)
+      const question = action.payload[0]
+      state.push(question)
     },
     updateQuestion(state, action) {
       const id = action.payload.id

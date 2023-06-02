@@ -73,13 +73,14 @@ quizzesRouter.post('/:id/like', async (request, response) => {
     }
 
     quiz.likedBy.push(userId);
-    await quiz.save();
+    const savedQuiz = await quiz.save();
+    const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id');
 
     const user = await User.findById(userId);
     user.likedQuizzes.push(quizId);
     await user.save();
 
-    response.status(200).json({ message: 'Quiz liked successfully' });
+    response.status(200).json(populatedQuiz);
   } catch (error) {
     response.status(500).json({ error: 'Internal server error' });
   }
@@ -103,13 +104,14 @@ quizzesRouter.post('/:id/unlike', async (request, response) => {
     }
 
     quiz.likedBy = quiz.likedBy.filter((likedUserId) => likedUserId.toString() !== userId);
-    await quiz.save();
+    const savedQuiz = await quiz.save();
+    const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id');
 
     const user = await User.findById(userId);
     user.likedQuizzes = user.likedQuizzes.filter((likedQuizId) => likedQuizId.toString() !== quizId);
     await user.save();
 
-    response.status(200).json({ message: 'Quiz unliked successfully' });
+    response.status(200).json(populatedQuiz);
   } catch (error) {
     response.status(500).json({ error: 'Internal server error' });
   }

@@ -56,6 +56,66 @@ quizzesRouter.post('/', async (request, response) => {
   response.status(201).json(populatedQuiz);
 });
 
+quizzesRouter.post('/:id/like', async (request, response) => {
+  const quizId = request.params.id;
+  const userId = request.user.id;
+
+  try {
+    const quiz = await Quiz.findById(quizId);
+
+    if (!quiz) {
+      return response.status(404).json({ error: 'Quiz not found' });
+    }
+
+    // Check if the quiz is already liked by the user
+    if (quiz.likedBy.includes(userId)) {
+      return response.status(400).json({ error: 'Quiz already liked by the user' });
+    }
+
+    quiz.likedBy.push(userId);
+    await quiz.save();
+
+    const user = await User.findById(userId);
+    user.likedQuizzes.push(quizId);
+    await user.save();
+
+    response.status(200).json({ message: 'Quiz liked successfully' });
+  } catch (error) {
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+quizzesRouter.post('/:id/unlike', async (request, response) => {
+  const quizId = request.params.id;
+  const userId = request.user.id;
+
+  try {
+    const quiz = await Quiz.findById(quizId);
+
+    if (!quiz) {
+      return response.status(404).json({ error: 'Quiz not found' });
+    }
+
+    // Check if the quiz is not liked by the user
+    if (!quiz.likedBy.includes(userId)) {
+      return response.status(400).json({ error: 'Quiz is not liked by the user' });
+    }
+
+    quiz.likedBy = quiz.likedBy.filter((likedUserId) => likedUserId.toString() !== userId);
+    await quiz.save();
+
+    const user = await User.findById(userId);
+    user.likedQuizzes = user.likedQuizzes.filter((likedQuizId) => likedQuizId.toString() !== quizId);
+    await user.save();
+
+    response.status(200).json({ message: 'Quiz unliked successfully' });
+  } catch (error) {
+    response.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 quizzesRouter.delete('/:id', async (request, response) => {
   const quiz = await Quiz.findById(request.params.id);
 

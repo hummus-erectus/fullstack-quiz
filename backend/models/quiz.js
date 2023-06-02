@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const quizSchema = new mongoose.Schema({
   title: String,
-  likes: Number,
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
@@ -11,6 +10,10 @@ const quizSchema = new mongoose.Schema({
   questions: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Question'
+  }],
+  likedBy: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   }]
 });
 

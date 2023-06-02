@@ -8,7 +8,7 @@ import { StyledQuizView } from './styles/QuizView.styled'
 import QuestionForm from './QuestionForm'
 import PlayQuiz from './PlayQuiz'
 
-const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, addQuestion, removeQuestion }) => {
+const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment, isLoading, addQuestion, removeQuestion }) => {
   const quiz = individualQuiz
   const user = useSelector(({ user }) => user)
   const questions = useSelector(({ question }) => question)
@@ -24,6 +24,8 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, 
     addComment(quiz.id, comment)
     setComment('')
   }
+
+  console.log(quiz)
 
   if (!quiz) {
     return null
@@ -78,7 +80,12 @@ const QuizView = ({ individualQuiz, addLike, deleteQuiz, addComment, isLoading, 
       )}
 
       <p>
-        {quiz.likes} likes <Button onClick={() => addLike(quiz.id)}>like</Button>
+        {quiz.likedBy ? quiz.likedBy.length : '0'} likes{' '}
+        {quiz.likedBy && quiz.likedBy.includes(user.id) ? (
+          <Button onClick={() => removeLike(quiz.id)}>unlike</Button> // Display unlike button if already liked
+        ) : (
+          <Button onClick={() => addLike(quiz.id)}>like</Button> // Display like button if not liked
+        )}
       </p>
       <p>
         Added by <Link to={`/users/${user.id}`} className="username">{quiz.user.username}</Link>

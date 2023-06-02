@@ -13,7 +13,6 @@ const create = async (newObject) => {
   const config = {
     headers: { Authorization: tokenService.getToken() },
   }
-
   const response = await axios.post(baseUrl, newObject, config)
   return response.data
 }
@@ -35,4 +34,20 @@ const createComment = async (id, newObject) => {
   return response.data
 }
 
-export default { getAll, create, update, remove, createComment }
+const addLike = async (id) => {
+  const config = {
+    headers: { Authorization: tokenService.getToken() },
+  }
+  const response = await axios.post(`${baseUrl}/${id}/like`,'', config)
+  return response.data
+}
+
+const removeLike = async (id) => {
+  const config = {
+    headers: { Authorization: tokenService.getToken() },
+  }
+  const response = await axios.post(`${baseUrl}/${id}/unlike`,'', config)
+  return response.data
+}
+
+export default { getAll, create, update, remove, createComment, addLike, removeLike }

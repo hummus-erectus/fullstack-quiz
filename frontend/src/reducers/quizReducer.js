@@ -11,14 +11,7 @@ const quizSlice = createSlice({
     appendQuiz(state, action) {
       state.push(action.payload)
     },
-    addLike(state, action) {
-      const id = action.payload.id
-      const changedQuiz = action.payload
-      return state.map(quiz =>
-        quiz.id !== id? quiz : changedQuiz
-      )
-    },
-    addComment(state, action) {
+    update(state, action) {
       const id = action.payload.id
       const changedQuiz = action.payload
       return state.map(quiz =>
@@ -32,7 +25,7 @@ const quizSlice = createSlice({
   }
 })
 
-export const { setQuizzes, appendQuiz, addLike, addComment, deleteQuiz } = quizSlice.actions
+export const { setQuizzes, appendQuiz, update, deleteQuiz } = quizSlice.actions
 
 export const initializeQuizzes = () => {
   return async dispatch => {
@@ -51,21 +44,22 @@ export const createQuiz = content => {
 
 export const newLike = id => {
   return async dispatch => {
-    const quizzes = await quizService.getAll()
-    const quizToChange = quizzes.find(a => a.id === id)
-    const changedQuiz = {
-      ...quizToChange,
-      likes: quizToChange.likes+1
-    }
-    const result = await quizService.update(id, changedQuiz)
-    dispatch(addLike(result))
+    const updatedQuiz = await quizService.addLike(id)
+    dispatch(update(updatedQuiz))
+  }
+}
+
+export const unLike = id => {
+  return async dispatch => {
+    const updatedQuiz = await quizService.removeLike(id)
+    dispatch(update(updatedQuiz))
   }
 }
 
 export const newComment = (id, content) => {
   return async dispatch => {
     const addedComment = await quizService.createComment(id, { content: content })
-    dispatch(addComment(addedComment))
+    dispatch(update(addedComment))
   }
 }
 

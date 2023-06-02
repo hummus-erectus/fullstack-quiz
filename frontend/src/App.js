@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
-import { initializeQuizzes, createQuiz, newLike, removeQuiz, newComment } from './reducers/quizReducer'
+import { initializeQuizzes, createQuiz, newLike, unLike, removeQuiz, newComment } from './reducers/quizReducer'
 import { createQuestion, initializeQuestions, removeQuestionAction } from './reducers/questionsReducer'
 
 // import { updateQuestionAction } from './reducers/questionsReducer'
@@ -106,6 +106,16 @@ const App = () => {
     try {
       await dispatch(newLike(id))
       dispatch(setNotification(`You liked "${quiz.title}"`, 'success', 5))
+    } catch (error) {
+      dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
+    }
+  }
+
+  const removeLike = async (id) => {
+    const quiz = quizzes.find((n) => n.id === id)
+    try {
+      await dispatch(unLike(id))
+      dispatch(setNotification(`You unliked "${quiz.title}"`, 'success', 5))
     } catch (error) {
       dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
     }
@@ -257,6 +267,7 @@ const App = () => {
                     individualQuiz={individualQuiz}
                     isLoading={isLoadingQuestions}
                     addLike={addLike}
+                    removeLike={removeLike}
                     deleteQuiz={deleteQuiz}
                     addComment={addComment}
                     addQuestion={addQuestion}

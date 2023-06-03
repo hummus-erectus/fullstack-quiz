@@ -3,7 +3,7 @@ import { StyledQuizList } from './styles/QuizList.styled'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-const LikedQuizList = ({ individualUser }) => {
+const LikedQuizList = ({ individualUser, removeLike }) => {
   const quizzes = useSelector(({ quiz }) => quiz)
   const user = individualUser
 
@@ -23,7 +23,7 @@ const LikedQuizList = ({ individualUser }) => {
           .map((quiz) => (
             <li className='quiz' key={quiz.id}>
               <Link to={`/quizzes/${quiz.id}`}><span className="quizTitle">{quiz.title}</span></Link>
-              <Button>Remove</Button>
+              <Button onClick={() => removeLike(quiz.id)}>Remove</Button>
             </li>
           ))
         }

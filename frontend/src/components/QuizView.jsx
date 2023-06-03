@@ -80,9 +80,9 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
       <p>
         {quiz.likedBy ? quiz.likedBy.length : '0'} likes{' '}
         {quiz.likedBy && quiz.likedBy.includes(user.id) ? (
-          <Button onClick={() => removeLike(quiz.id)}>unlike</Button> // Display unlike button if already liked
+          <Button onClick={() => removeLike(quiz.id)}>unlike</Button>
         ) : (
-          <Button onClick={() => addLike(quiz.id)}>like</Button> // Display like button if not liked
+          <Button onClick={() => addLike(quiz.id)}>like</Button>
         )}
       </p>
       <p>

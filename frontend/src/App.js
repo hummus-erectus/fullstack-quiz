@@ -4,9 +4,9 @@ import { setNotification } from './reducers/notificationReducer'
 import { initializeQuizzes, createQuiz, newLike, unLike, removeQuiz, newComment } from './reducers/quizReducer'
 import { createQuestion, initializeQuestions, removeQuestionAction } from './reducers/questionsReducer'
 
-// import { updateQuestionAction } from './reducers/questionsReducer'
+// import { updateQuestionAction } from './reducers/questionsReducer'fremoveLi
 
-import { removeUser, userLogin } from './reducers/userReducer'
+import { removeUser, userLogin, updateUser } from './reducers/userReducer'
 import { Routes, Route, useMatch } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import UserPage from './components/UserPage'
@@ -117,6 +117,7 @@ const App = () => {
     try {
       await dispatch(unLike(id))
       dispatch(setNotification(`You unliked "${quiz.title}"`, 'success', 5))
+      dispatch(updateUser(user.id))
     } catch (error) {
       dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
     }
@@ -261,7 +262,7 @@ const App = () => {
                     </>
                   }
                 />
-                <Route path='/mypage/' element={<UserPage user={user}/>}/>
+                <Route path='/mypage/' element={<UserPage user={user} removeLike={removeLike}/>}/>
                 <Route path='/users' element={<Users />}/>
                 <Route path='/users/:id' element={<User individualUser={individualUser}/>}/>
                 <Route path='/quizzes/:id' element={

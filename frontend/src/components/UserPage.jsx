@@ -1,7 +1,17 @@
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import LikedQuizList from './LikedQuizList'
+import { updateUser } from '../reducers/userReducer'
 import User from './User'
 
-const UserPage = ({ user }) => {
+const UserPage = ({ removeLike }) => {
+  const dispatch = useDispatch()
+  const user = useSelector(({ user }) => user)
+
+  useEffect(() => {
+    dispatch(updateUser(user.id))
+  }, [dispatch])
+
   if (!user) {
     return null
   }
@@ -10,7 +20,7 @@ const UserPage = ({ user }) => {
     <>
       <h2>Welcome, {user.username}</h2>
       <User individualUser={user}/>
-      <LikedQuizList individualUser={user}/>
+      <LikedQuizList individualUser={user} removeLike={removeLike}/>
     </>
   )
 }

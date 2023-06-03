@@ -1,8 +1,8 @@
-const bcrypt = require('bcryptjs')
-const usersRouter = require('express').Router()
-const User = require('../models/user')
+const bcrypt = require('bcryptjs');
+const usersRouter = require('express').Router();
+const User = require('../models/user');
 
-const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
 
 usersRouter.post('/', async (request, response) => {
   const { username, password } = request.body
@@ -46,4 +46,13 @@ usersRouter.get('/', async (request, response) => {
   response.json(users)
 })
 
-module.exports = usersRouter
+usersRouter.get('/:id', async (request, response) => {
+  const user = await User.findById(request.params.id);
+  if (user) {
+    response.json(user);
+  } else {
+    response.status(404).end();
+  }
+});
+
+module.exports = usersRouter;

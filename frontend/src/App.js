@@ -9,6 +9,7 @@ import { createQuestion, initializeQuestions, removeQuestionAction } from './red
 import { removeUser, userLogin } from './reducers/userReducer'
 import { Routes, Route, useMatch } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
+import UserPage from './components/UserPage'
 import QuizForm from './components/QuizForm'
 import QuizList from './components/QuizList'
 import Togglable from './components/Togglable'
@@ -260,6 +261,7 @@ const App = () => {
                     </>
                   }
                 />
+                <Route path='/mypage/' element={<UserPage user={user}/>}/>
                 <Route path='/users' element={<Users />}/>
                 <Route path='/users/:id' element={<User individualUser={individualUser}/>}/>
                 <Route path='/quizzes/:id' element={

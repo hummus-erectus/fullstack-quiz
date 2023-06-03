@@ -25,8 +25,6 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
     setComment('')
   }
 
-  console.log(quiz)
-
   if (!quiz) {
     return null
   }

@@ -142,6 +142,14 @@ const PlayQuiz = ({ questions }) => {
   }, [transcript])
 
   useEffect(() => {
+    SpeechRecognition.startListening({ continuous: true })
+
+    return () => {
+      SpeechRecognition.stopListening()
+    }
+  }, [])
+
+  useEffect(() => {
     if(currentQuestionIndex !== -1){
       shuffleOptions()
     }

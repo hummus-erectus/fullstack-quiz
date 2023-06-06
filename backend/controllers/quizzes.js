@@ -37,10 +37,6 @@ quizzesRouter.post('/', async (request, response) => {
     return response.status(400).end();
   }
 
-  if (!body.likes) {
-    body.likes = 0;
-  }
-
   const quiz = new Quiz({
     ...body,
     user: user._id,
@@ -67,7 +63,6 @@ quizzesRouter.post('/:id/like', async (request, response) => {
       return response.status(404).json({ error: 'Quiz not found' });
     }
 
-    // Check if the quiz is already liked by the user
     if (quiz.likedBy.includes(userId)) {
       return response.status(400).json({ error: 'Quiz already liked by the user' });
     }
@@ -98,7 +93,6 @@ quizzesRouter.post('/:id/unlike', async (request, response) => {
       return response.status(404).json({ error: 'Quiz not found' });
     }
 
-    // Check if the quiz is not liked by the user
     if (!quiz.likedBy.includes(userId)) {
       return response.status(400).json({ error: 'Quiz is not liked by the user' });
     }
@@ -135,30 +129,37 @@ quizzesRouter.delete('/:id', async (request, response) => {
   response.status(204).end();
 });
 
-quizzesRouter.put('/:id', async (request, response) => {
-  const body = request.body;
+quizzesRouter.put('/:id', async (request, response, next) => {
+  const { title, description } = request.body;
+  const user = request.user;
 
-  if (!body.title) {
-    return response.status(400).end();
+  if (!title) {
+    return response.status(400).json({ error: 'Title is required' });
   }
-
-  if (!body.likes) {
-    body.likes = 0;
-  }
-
-  const quiz = {
-    title: body.title,
-    likes: body.likes,
-    user: body.user.id,
-  };
 
   try {
-    const updatedQuiz = await Quiz.findByIdAndUpdate(request.params.id, quiz, { new: true }).populate('user', 'username _id');
+    const quiz = await Quiz.findById(request.params.id);
+
+    if (!quiz) {
+      return response.status(404).json({ error: 'Quiz not found' });
+    }
+
+    if (!user || quiz.user.toString() !== user.id) {
+      return response.status(401).json({ error: 'Operation not permitted' });
+    }
+
+    quiz.title = title;
+    quiz.description = description;
+
+    const updatedQuiz = await quiz.save();
+
     response.json(updatedQuiz);
   } catch (error) {
     next(error);
   }
 });
+
+
 
 quizzesRouter.post('/:id/comments', async (request, response) => {
   const body = request.body;

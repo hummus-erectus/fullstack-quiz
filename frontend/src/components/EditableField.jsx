@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Button } from './styles/Button.styled'
 import { Form } from './styles/Form.styled'
+import { FiEdit2 } from 'react-icons/fi'
+import { StyledEditableField } from './styles/EditableField.styled'
 
 const EditableField = ({ initialValue, onChange, tagName, originalValue, required }) => {
 
@@ -44,12 +46,12 @@ const EditableField = ({ initialValue, onChange, tagName, originalValue, require
   const Tag = tagName
 
   return (
-    <div>
+    <StyledEditableField>
       <Tag>{value}</Tag>
-      <button onClick={handleEditClick}>
-        Edit
-      </button>
-    </div>
+      <span onClick={handleEditClick} className="clickable-icon">
+        <FiEdit2 />
+      </span>
+    </StyledEditableField>
   )
 }
 

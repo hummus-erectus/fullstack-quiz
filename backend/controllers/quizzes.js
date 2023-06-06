@@ -151,9 +151,11 @@ quizzesRouter.put('/:id', async (request, response, next) => {
     quiz.title = title;
     quiz.description = description;
 
-    const updatedQuiz = await quiz.save();
+    const savedQuiz = await quiz.save();
 
-    response.json(updatedQuiz);
+    const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id');
+
+    response.status(200).json(populatedQuiz);
   } catch (error) {
     next(error);
   }

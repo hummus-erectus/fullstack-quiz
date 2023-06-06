@@ -4,6 +4,10 @@ export const StyledQuizView = styled.div`
     display: flex;
     flex-direction: column;
 
+    .description{
+        font-weight: 600;
+    }
+
     .username{
         font-weight: 600;
         color: ${({ theme }) => theme.colors.primaryContent || '#000'};

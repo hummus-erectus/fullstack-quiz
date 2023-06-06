@@ -1,12 +1,14 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Togglable from './Togglable'
 import { Button } from './styles/Button.styled'
 import { ButtonAlt } from './styles/ButtonAlt.styled'
 import { StyledQuizView } from './styles/QuizView.styled'
 import QuestionForm from './QuestionForm'
 import PlayQuiz from './PlayQuiz'
+import EditableField from './EditableField'
+import { updateQuiz } from '../reducers/quizReducer'
 
 const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment, isLoading, addQuestion, removeQuestion }) => {
   const quiz = individualQuiz
@@ -14,6 +16,31 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
   const questions = useSelector(({ question }) => question)
   const navigate = useNavigate()
   const questionFormRef = useRef()
+  const dispatch = useDispatch()
+
+  const [originalTitle, setOriginalTitle] = useState('')
+  const [originalDescription, setOriginalDescription] = useState('')
+
+  useEffect(() => {
+    if (quiz) {
+      setOriginalTitle(quiz.title)
+      quiz.description ? setOriginalDescription(quiz.description) : setOriginalDescription('')
+
+    }
+  }, [quiz])
+
+  const handleTitleChange = async (value) => {
+    // if (value.trim() === '') {
+    //   return
+    // }
+    const changedQuiz = { ...quiz, title: value }
+    await dispatch(updateQuiz(quiz.id, changedQuiz))
+  }
+
+  const handleDescriptionChange = async (value) => {
+    const changedQuiz = { ...quiz, description: value }
+    await dispatch(updateQuiz(quiz.id, changedQuiz))
+  }
 
   const [startQuiz, setStartQuiz] = useState(false)
 
@@ -44,7 +71,29 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
 
   return (
     <StyledQuizView>
-      <h2>{quiz.title}</h2>
+      {quiz.user.username === user.username ?
+        <>
+          <EditableField
+            initialValue={quiz.title}
+            onChange={handleTitleChange}
+            tagName="h2"
+            originalValue={originalTitle}
+            required={true}
+          />
+          <EditableField
+            initialValue={quiz.description}
+            onChange={handleDescriptionChange}
+            tagName="p"
+            originalValue={originalDescription}
+            required={false}
+          />
+        </>
+        :
+        <>
+          <h2>{quiz.title}</h2>
+          <p>{quiz.description}</p>
+        </>
+      }
       <p>{questions.length} {questions.length === 1 ? 'question' : 'questions'}</p>
 
 

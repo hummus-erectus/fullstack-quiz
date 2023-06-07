@@ -226,7 +226,6 @@ const App = () => {
         {user && <Navigation user={user} handleLogout={handleLogout} />}
         <Notification />
         <Container>
-          <h1>Quiz App</h1>
           {!user ? ( // Render login form or signup form based on user state
             <>
               {!showLoginForm && (
@@ -254,11 +253,10 @@ const App = () => {
                 <Route path='/' element=
                   {
                     <>
+                      <QuizList quizzes={quizzes}/>
                       <Togglable buttonLabel="new quiz" ref={quizFormRef}>
                         <QuizForm createQuiz={addQuiz} />
                       </Togglable>
-
-                      <QuizList quizzes={quizzes}/>
                     </>
                   }
                 />

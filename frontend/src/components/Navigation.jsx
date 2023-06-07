@@ -14,6 +14,7 @@ const Navigation = ({ user, handleLogout }) => {
             <Link to="/">Quizzes</Link>
             <Link to="/users">Users</Link>
           </Flex>
+          <Link to="/" className='logo'>Quiz App</Link>
           <Flex>
             <p><Link to="/mypage"><span>{user.username}</span></Link> logged in</p>
             <Button onClick={handleLogout} className="logoutButton">

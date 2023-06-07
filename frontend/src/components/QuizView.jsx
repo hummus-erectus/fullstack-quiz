@@ -91,16 +91,19 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
         :
         <>
           <h2>{quiz.title}</h2>
-          <p>{quiz.description}</p>
+          {quiz.description && <p>{quiz.description}</p>}
         </>
       }
       <p>{questions.length} {questions.length === 1 ? 'question' : 'questions'}</p>
 
+      <p>
+        Added by <Link to={`/users/${user.id}`} className="username">{quiz.user.username}</Link>
+      </p>
 
       {questions.length > 0 && (
         <>
-          <Button onClick={handleStartQuiz}>Start Quiz</Button>
-          <Togglable buttonLabel="See Questions">
+          <Button onClick={handleStartQuiz}>Start quiz</Button>
+          <Togglable buttonLabel="See questions">
             {
               questions.map((question) => (
                 <div key={question._id}>
@@ -121,22 +124,11 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
       )}
 
       {quiz.user.username === user.username && (
-        <Togglable buttonLabel="Add Question" ref={questionFormRef}>
+        <Togglable buttonLabel="Add question" ref={questionFormRef}>
           <QuestionForm addQuestion={addQuestion} quizId={quiz.id}/>
         </Togglable>
       )}
 
-      <p>
-        {quiz.likedBy ? quiz.likedBy.length : '0'} likes{' '}
-        {quiz.likedBy && quiz.likedBy.includes(user.id) ? (
-          <Button onClick={() => removeLike(quiz.id)}>unlike</Button>
-        ) : (
-          <Button onClick={() => addLike(quiz.id)}>like</Button>
-        )}
-      </p>
-      <p>
-        Added by <Link to={`/users/${user.id}`} className="username">{quiz.user.username}</Link>
-      </p>
       {quiz.user.username === user.username && (
         <ButtonAlt
           onClick={() => {
@@ -144,9 +136,18 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
             navigate('/')
           }}
         >
-          remove
+          Remove quiz
         </ButtonAlt>
       )}
+
+      <p>
+        {quiz.likedBy ? quiz.likedBy.length : '0'} likes{' '}
+        {quiz.likedBy && quiz.likedBy.includes(user.id) ? (
+          <Button onClick={() => removeLike(quiz.id)}>Unlike</Button>
+        ) : (
+          <Button onClick={() => addLike(quiz.id)}>Like</Button>
+        )}
+      </p>
       <div className="commentsContainer">
         <h3>Comments</h3>
         {quiz.comments.length > 0 ? (
@@ -168,7 +169,7 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
             onChange={({ target }) => setComment(target.value)}
           />
           <Button type="submit" className="submitButton">
-            add comment
+            Add comment
           </Button>
         </form>
       </div>

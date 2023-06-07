@@ -19,4 +19,8 @@ export const StyledNavigation = styled.div`
         font-weight: 700;
     }
 
+    .logo {
+        font-size: 2rem;
+    }
+
 `

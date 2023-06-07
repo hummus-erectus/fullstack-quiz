@@ -1,7 +1,7 @@
-import { Button } from './styles/Button.styled'
 import { StyledQuizList } from './styles/QuizList.styled'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { MdRemoveCircleOutline } from 'react-icons/md'
 
 const LikedQuizList = ({ individualUser, removeLike }) => {
   const quizzes = useSelector(({ quiz }) => quiz)
@@ -23,7 +23,9 @@ const LikedQuizList = ({ individualUser, removeLike }) => {
           .map((quiz) => (
             <li className='quiz' key={quiz.id}>
               <Link to={`/quizzes/${quiz.id}`}><span className="quizTitle">{quiz.title}</span></Link>
-              <Button onClick={() => removeLike(quiz.id)}>Remove</Button>
+              <span onClick={() => removeLike(quiz.id)} className="clickable-icon">
+                <MdRemoveCircleOutline />
+              </span>
             </li>
           ))
         }

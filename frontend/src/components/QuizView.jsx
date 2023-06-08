@@ -86,6 +86,7 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
             tagName="p"
             originalValue={originalDescription}
             required={false}
+            placeholder="Add a description"
           />
         </>
         :

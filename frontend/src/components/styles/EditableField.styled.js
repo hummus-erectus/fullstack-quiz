@@ -8,4 +8,8 @@ export const StyledEditableField = styled.div`
     .clickable-icon {
         cursor: pointer;
     }
+
+    .placeholder {
+        font-style: italic;
+    }
 `

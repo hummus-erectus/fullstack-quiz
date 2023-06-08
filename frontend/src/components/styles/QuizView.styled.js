@@ -4,11 +4,11 @@ export const StyledQuizView = styled.div`
     display: flex;
     flex-direction: column;
 
-    .description{
+    .description {
         font-weight: 600;
     }
 
-    .username{
+    .username {
         font-weight: 600;
         color: ${({ theme }) => theme.colors.primaryContent || '#000'};
         text-decoration: none;

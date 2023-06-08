@@ -4,7 +4,7 @@ import { Form } from './styles/Form.styled'
 import { FiEdit2 } from 'react-icons/fi'
 import { StyledEditableField } from './styles/EditableField.styled'
 
-const EditableField = ({ initialValue, onChange, tagName, originalValue, required }) => {
+const EditableField = ({ initialValue, onChange, tagName, originalValue, required, placeholder }) => {
 
   const [isEditing, setIsEditing] = useState(false)
   const [value, setValue] = useState(initialValue)
@@ -14,10 +14,17 @@ const EditableField = ({ initialValue, onChange, tagName, originalValue, require
   }
 
   const handleBlur = () => {
-    if (required && value.trim() === '') {
-      setValue(originalValue)
-    } else if ((originalValue && value.trim() === originalValue) || (!originalValue && value.trim() === '')) {
+    const trimmedValue = value.trim()
+    if (required && trimmedValue === '') {
+      setValue(originalValue || '')
+    } else if (
+      (originalValue && value && trimmedValue === originalValue) ||
+      (originalValue && value && trimmedValue === '') ||
+      (!originalValue && !value) ||
+      (!originalValue && value && trimmedValue === '')
+    ) {
       setIsEditing(false)
+      setValue(originalValue || '')
     } else {
       onChange(value)
       setIsEditing(false)
@@ -33,7 +40,7 @@ const EditableField = ({ initialValue, onChange, tagName, originalValue, require
       <Form>
         <input
           type="text"
-          value={value}
+          value={value || ''}
           onChange={handleChange}
           onBlur={handleBlur}
           autoFocus
@@ -47,7 +54,11 @@ const EditableField = ({ initialValue, onChange, tagName, originalValue, require
 
   return (
     <StyledEditableField>
-      <Tag>{value}</Tag>
+      {!value && placeholder?
+        <Tag className="placeholder">{placeholder}</Tag>
+        :
+        <Tag>{value}</Tag>
+      }
       <span onClick={handleEditClick} className="clickable-icon">
         <FiEdit2 />
       </span>

@@ -9,6 +9,11 @@ const getAll = async () => {
   return response.data
 }
 
+const getIndividual = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`)
+  return response.data
+}
+
 const create = async (newObject) => {
   const config = {
     headers: { Authorization: tokenService.getToken() },
@@ -53,4 +58,4 @@ const removeLike = async (id) => {
   return response.data
 }
 
-export default { getAll, create, update, remove, createComment, addLike, removeLike }
+export default { getAll, getIndividual, create, update, remove, createComment, addLike, removeLike }

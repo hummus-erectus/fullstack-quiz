@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { newLike, unLike, removeQuiz, newComment } from './reducers/quizReducer'
-import { createQuestion, initializeQuestions, removeQuestionAction } from './reducers/questionsReducer'
+import { createQuestion, removeQuestionAction } from './reducers/questionsReducer'
 import { removeUser, userLogin, updateUser } from './reducers/userReducer'
 import { Routes, Route, useMatch } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
@@ -169,34 +169,34 @@ const App = () => {
     }
   }, [matchQuiz, quizzes])
 
-  const [isLoadingQuestions, setIsLoadingQuestions] = useState(false)
-  const [selectedQuizId, setSelectedQuizId] = useState(null)
-  const [questionsFetched, setQuestionsFetched] = useState(false)
+  // const [isLoadingQuestions, setIsLoadingQuestions] = useState(false)
+  // const [selectedQuizId, setSelectedQuizId] = useState(null)
+  // const [questionsFetched, setQuestionsFetched] = useState(false)
 
-  useEffect(() => {
-    setQuestionsFetched(false)
-  }, [selectedQuizId])
+  // useEffect(() => {
+  //   setQuestionsFetched(false)
+  // }, [selectedQuizId])
 
-  useEffect(() => {
-    if (selectedQuizId && !questionsFetched) {
-      setIsLoadingQuestions(true)
-      dispatch(initializeQuestions(selectedQuizId))
-        .then(() => {
-          setIsLoadingQuestions(false)
-          setQuestionsFetched(true)
-        })
-        .catch((error) => {
-          setIsLoadingQuestions(false)
-          console.error(error)
-        })
-    }
-  }, [dispatch, selectedQuizId, questionsFetched])
+  // useEffect(() => {
+  //   if (selectedQuizId && !questionsFetched) {
+  //     setIsLoadingQuestions(true)
+  //     dispatch(initializeQuestions(selectedQuizId))
+  //       .then(() => {
+  //         setIsLoadingQuestions(false)
+  //         setQuestionsFetched(true)
+  //       })
+  //       .catch((error) => {
+  //         setIsLoadingQuestions(false)
+  //         console.error(error)
+  //       })
+  //   }
+  // }, [dispatch, selectedQuizId, questionsFetched])
 
-  useEffect(() => {
-    if (individualQuiz) {
-      setSelectedQuizId(individualQuiz.id)
-    }
-  }, [individualQuiz])
+  // useEffect(() => {
+  //   if (individualQuiz) {
+  //     setSelectedQuizId(individualQuiz.id)
+  //   }
+  // }, [individualQuiz])
 
   return (
     <ThemeProvider theme={theme}>
@@ -233,10 +233,9 @@ const App = () => {
                 <Route path='/mypage/' element={<UserPage removeLike={removeLike}/>}/>
                 <Route path='/users' element={<Users />}/>
                 <Route path='/users/:id' element={<User individualUser={individualUser}/>}/>
-                <Route path='/quizzes/:id' element={
+                <Route path='/quizzes/:quizId' element={
                   <QuizView
                     individualQuiz={individualQuiz}
-                    isLoading={isLoadingQuestions}
                     addLike={addLike}
                     removeLike={removeLike}
                     deleteQuiz={deleteQuiz}

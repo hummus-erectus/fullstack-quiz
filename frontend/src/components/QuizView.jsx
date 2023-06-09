@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
 import Togglable from './Togglable'
 import { Button } from './styles/Button.styled'
@@ -9,31 +9,56 @@ import QuestionForm from './QuestionForm'
 import PlayQuiz from './PlayQuiz'
 import EditableField from './EditableField'
 import { updateQuiz } from '../reducers/quizReducer'
+import { initializeQuestions } from '../reducers/questionsReducer'
 import QuestionTogglable from './QuestionTogglable'
+import quizzes from '../services/quizzes'
 
-const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment, isLoading, addQuestion, removeQuestion }) => {
-  const quiz = individualQuiz
+const QuizView = ({ addLike, removeLike, deleteQuiz, addComment, addQuestion, removeQuestion }) => {
+  const [isLoadingQuestions, setIsLoadingQuestions] = useState(true)
   const user = useSelector(({ user }) => user)
   const questions = useSelector(({ question }) => question)
   const navigate = useNavigate()
   const questionFormRef = useRef()
   const dispatch = useDispatch()
 
+  const { quizId } = useParams()
+
+  const [quiz, setQuiz] = useState(null)
+
+
   const [originalTitle, setOriginalTitle] = useState('')
   const [originalDescription, setOriginalDescription] = useState('')
+
+  useEffect(() => {
+    const fetchIndividualQuiz = async () => {
+      const fetchedQuiz = await quizzes.getIndividual(quizId)
+      setQuiz(fetchedQuiz)
+    }
+    fetchIndividualQuiz()
+  }, [quizId])
+
+  useEffect(() => {
+    if (quiz) {
+      setIsLoadingQuestions(true)
+      dispatch(initializeQuestions(quiz.id))
+        .then(() => {
+          setIsLoadingQuestions(false)
+        })
+        .catch((error) => {
+          setIsLoadingQuestions(false)
+          console.error(error)
+        })
+    }
+  }, [dispatch, quiz])
 
   useEffect(() => {
     if (quiz) {
       setOriginalTitle(quiz.title)
       quiz.description ? setOriginalDescription(quiz.description) : setOriginalDescription('')
-
     }
   }, [quiz])
 
   const handleTitleChange = async (value) => {
-    // if (value.trim() === '') {
-    //   return
-    // }
     const changedQuiz = { ...quiz, title: value }
     await dispatch(updateQuiz(quiz.id, changedQuiz))
   }
@@ -57,7 +82,7 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
     return null
   }
 
-  if (isLoading) {
+  if (isLoadingQuestions) {
     return <p>Loading quiz...</p>
   }
 

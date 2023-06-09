@@ -95,11 +95,10 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
           {quiz.description && <p>{quiz.description}</p>}
         </>
       }
-      <p>{questions.length} {questions.length === 1 ? 'question' : 'questions'}</p>
 
-      <p>
-        Added by <Link to={`/users/${user.id}`} className="username">{quiz.user.username}</Link>
-      </p>
+      <p>Added by <Link to={`/users/${user.id}`} className="username">{quiz.user.username}</Link></p>
+
+      <p>{questions.length} {questions.length === 1 ? 'question' : 'questions'}</p>
 
       {questions.length > 0 && (
         <>

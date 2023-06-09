@@ -1,18 +1,12 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
-import { initializeQuizzes, createQuiz, newLike, unLike, removeQuiz, newComment } from './reducers/quizReducer'
+import { newLike, unLike, removeQuiz, newComment } from './reducers/quizReducer'
 import { createQuestion, initializeQuestions, removeQuestionAction } from './reducers/questionsReducer'
-
-// import { updateQuestionAction } from './reducers/questionsReducer'fremoveLi
-
 import { removeUser, userLogin, updateUser } from './reducers/userReducer'
 import { Routes, Route, useMatch } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import UserPage from './components/UserPage'
-import QuizForm from './components/QuizForm'
-import QuizList from './components/QuizList'
-import Togglable from './components/Togglable'
 import loginService from './services/login'
 import tokenService from './services/tokenService'
 import Notification from './components/Notification'
@@ -26,6 +20,7 @@ import { ThemeProvider } from 'styled-components'
 import { Container } from './components/styles/Container.styled'
 import SignUpForm from './components/SignUpForm'
 import { Button } from './components/styles/Button.styled'
+import QuizHome from './components/QuizHome'
 
 const theme = {
   colors: {
@@ -42,9 +37,8 @@ const theme = {
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [showLoginForm, setShowLoginForm] = useState(true) // New state for login/signup form toggle
+  const [showLoginForm, setShowLoginForm] = useState(true)
 
-  const quizFormRef = useRef()
   const dispatch = useDispatch()
   const quizzes = useSelector(({ quiz }) => quiz)
   const user = useSelector(({ user }) => user)
@@ -52,11 +46,7 @@ const App = () => {
   // const questions = useSelector(({ questions }) => questions)
 
   useEffect(() => {
-    dispatch(initializeQuizzes())
     dispatch(initializeUsers())
-  }, [dispatch])
-
-  useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedQuizUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -90,17 +80,6 @@ const App = () => {
   }
 
   const handleSignUp = () => setShowLoginForm(true)
-
-
-  const addQuiz = async (quizObject) => {
-    quizFormRef.current.toggleVisibility()
-    try {
-      await dispatch(createQuiz(quizObject))
-      dispatch(setNotification(`${quizObject.title} added`, 'success', 5))
-    } catch (error) {
-      dispatch(setNotification(error.message, 'error', 5))
-    }
-  }
 
   const addLike = async (id) => {
     const quiz = quizzes.find((n) => n.id === id)
@@ -150,7 +129,7 @@ const App = () => {
 
   const addQuestion = async (quizId, questionObject) => {
     try {
-      await dispatch(createQuestion(quizId, questionObject)) // Dispatch createQuestion action with quizId and questionObject
+      await dispatch(createQuestion(quizId, questionObject))
       dispatch(setNotification('Question added', 'success', 5))
     } catch (error) {
       dispatch(setNotification(error.message, 'error', 5))
@@ -168,7 +147,7 @@ const App = () => {
 
   const removeQuestion = async (questionId, quizId) => {
     try {
-      await dispatch(removeQuestionAction(questionId, quizId)) // Dispatch removeQuestionAction with questionId and quizId
+      await dispatch(removeQuestionAction(questionId, quizId))
       dispatch(setNotification('Question removed', 'success', 5))
     } catch (error) {
       dispatch(setNotification(error.message, 'error', 5))
@@ -195,7 +174,7 @@ const App = () => {
   const [questionsFetched, setQuestionsFetched] = useState(false)
 
   useEffect(() => {
-    setQuestionsFetched(false) // Reset the flag when individualQuiz changes
+    setQuestionsFetched(false)
   }, [selectedQuizId])
 
   useEffect(() => {
@@ -226,12 +205,12 @@ const App = () => {
         {user && <Navigation user={user} handleLogout={handleLogout} />}
         <Notification />
         <Container>
-          {!user ? ( // Render login form or signup form based on user state
+          {!user ? (
             <>
               {!showLoginForm && (
                 <>
                   <SignUpForm handleSignUp={handleSignUp} />
-                  <Button onClick={() => setShowLoginForm(true)}>Login</Button> {/* Toggle to show login form */}
+                  <Button onClick={() => setShowLoginForm(true)}>Login</Button>
                 </>
               )}
               {showLoginForm && (
@@ -243,24 +222,15 @@ const App = () => {
                     handlePasswordChange={({ target }) => setPassword(target.value)}
                     handleSubmit={handleLogin}
                   />
-                  <Button onClick={() => setShowLoginForm(false)}>Sign up</Button> {/* Toggle to show signup form */}
+                  <Button onClick={() => setShowLoginForm(false)}>Sign up</Button>
                 </>
               )}
             </>
           ) : (
             <>
               <Routes>
-                <Route path='/' element=
-                  {
-                    <>
-                      <QuizList quizzes={quizzes}/>
-                      <Togglable buttonLabel="new quiz" ref={quizFormRef}>
-                        <QuizForm createQuiz={addQuiz} />
-                      </Togglable>
-                    </>
-                  }
-                />
-                <Route path='/mypage/' element={<UserPage user={user} removeLike={removeLike}/>}/>
+                <Route path='/' element={<QuizHome />}/>
+                <Route path='/mypage/' element={<UserPage removeLike={removeLike}/>}/>
                 <Route path='/users' element={<Users />}/>
                 <Route path='/users/:id' element={<User individualUser={individualUser}/>}/>
                 <Route path='/quizzes/:id' element={

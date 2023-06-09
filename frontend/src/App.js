@@ -43,7 +43,6 @@ const App = () => {
   const quizzes = useSelector(({ quiz }) => quiz)
   const user = useSelector(({ user }) => user)
   const users = useSelector(({ users }) => users)
-  // const questions = useSelector(({ questions }) => questions)
 
   useEffect(() => {
     dispatch(initializeUsers())
@@ -159,45 +158,6 @@ const App = () => {
     ? users.find(user => user.id === matchUser.params.id)
     : null
 
-  const matchQuiz = useMatch('/quizzes/:id')
-  const [individualQuiz, setIndividualQuiz] = useState(null)
-
-  useEffect(() => {
-    if (matchQuiz && quizzes.length > 0) {
-      const quiz = quizzes.find((quiz) => quiz.id === matchQuiz.params.id)
-      setIndividualQuiz(quiz)
-    }
-  }, [matchQuiz, quizzes])
-
-  // const [isLoadingQuestions, setIsLoadingQuestions] = useState(false)
-  // const [selectedQuizId, setSelectedQuizId] = useState(null)
-  // const [questionsFetched, setQuestionsFetched] = useState(false)
-
-  // useEffect(() => {
-  //   setQuestionsFetched(false)
-  // }, [selectedQuizId])
-
-  // useEffect(() => {
-  //   if (selectedQuizId && !questionsFetched) {
-  //     setIsLoadingQuestions(true)
-  //     dispatch(initializeQuestions(selectedQuizId))
-  //       .then(() => {
-  //         setIsLoadingQuestions(false)
-  //         setQuestionsFetched(true)
-  //       })
-  //       .catch((error) => {
-  //         setIsLoadingQuestions(false)
-  //         console.error(error)
-  //       })
-  //   }
-  // }, [dispatch, selectedQuizId, questionsFetched])
-
-  // useEffect(() => {
-  //   if (individualQuiz) {
-  //     setSelectedQuizId(individualQuiz.id)
-  //   }
-  // }, [individualQuiz])
-
   return (
     <ThemeProvider theme={theme}>
       <>
@@ -235,7 +195,6 @@ const App = () => {
                 <Route path='/users/:id' element={<User individualUser={individualUser}/>}/>
                 <Route path='/quizzes/:quizId' element={
                   <QuizView
-                    individualQuiz={individualQuiz}
                     addLike={addLike}
                     removeLike={removeLike}
                     deleteQuiz={deleteQuiz}

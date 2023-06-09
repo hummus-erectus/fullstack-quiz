@@ -9,6 +9,7 @@ import QuestionForm from './QuestionForm'
 import PlayQuiz from './PlayQuiz'
 import EditableField from './EditableField'
 import { updateQuiz } from '../reducers/quizReducer'
+import QuestionTogglable from './QuestionTogglable'
 
 const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment, isLoading, addQuestion, removeQuestion }) => {
   const quiz = individualQuiz
@@ -106,8 +107,7 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
           <Togglable buttonLabel="See questions">
             {
               questions.map((question) => (
-                <div key={question._id}>
-                  <p>{question.content}</p>
+                <QuestionTogglable key={question._id} label={question.content}>
                   <p>
                     {question.options.map((option) => (
                       <span key={option.optionId}>{option.content} </span>
@@ -116,7 +116,7 @@ const QuizView = ({ individualQuiz, addLike, removeLike, deleteQuiz, addComment,
                   {quiz.user.username === user.username &&
                     <Button onClick={() => removeQuestion(question._id, quiz.id)}>Remove Question</Button>
                   }
-                </div>
+                </QuestionTogglable>
               ))
             }
           </Togglable>

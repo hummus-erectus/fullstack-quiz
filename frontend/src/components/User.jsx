@@ -1,10 +1,24 @@
-import { useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
 import { StyledQuizList } from './styles/QuizList.styled'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
+import users from '../services/users'
 
-const User = ({ individualUser }) => {
-  const quizzes = useSelector(({ quiz }) => quiz)
-  const user = individualUser
+const User = () => {
+  const { userId } = useParams()
+
+  const [user, setUser] = useState(null)
+
+
+
+  useEffect(() => {
+    const fetchIndividualUser = async () => {
+      const fetchedUser = await users.getIndividual(userId)
+      setUser(fetchedUser)
+    }
+    fetchIndividualUser()
+  }, [userId])
+
+  console.log(user)
 
   if (!user) {
     return null
@@ -12,11 +26,10 @@ const User = ({ individualUser }) => {
 
   return (
     <StyledQuizList>
-      <h2>{user.name}</h2>
+      <h2>{user.username}</h2>
       <h3>Added quizzes</h3>
       <ul>
-        {quizzes
-          .filter((quiz) => quiz.user.id === user.id)
+        {user.quizzes
           .map((quiz) => (
             <li className='quiz' key={quiz.id}>
               <Link to={`/quizzes/${quiz.id}`}><span className="quizTitle">{quiz.title}</span></Link>

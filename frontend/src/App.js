@@ -4,7 +4,7 @@ import { setNotification } from './reducers/notificationReducer'
 import { newLike, unLike, removeQuiz, newComment } from './reducers/quizReducer'
 import { createQuestion, removeQuestionAction } from './reducers/questionsReducer'
 import { removeUser, userLogin, updateUser } from './reducers/userReducer'
-import { Routes, Route, useMatch } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import UserPage from './components/UserPage'
 import loginService from './services/login'
@@ -42,7 +42,6 @@ const App = () => {
   const dispatch = useDispatch()
   const quizzes = useSelector(({ quiz }) => quiz)
   const user = useSelector(({ user }) => user)
-  const users = useSelector(({ users }) => users)
 
   useEffect(() => {
     dispatch(initializeUsers())
@@ -153,11 +152,6 @@ const App = () => {
     }
   }
 
-  const matchUser = useMatch('/users/:id')
-  const individualUser = matchUser
-    ? users.find(user => user.id === matchUser.params.id)
-    : null
-
   return (
     <ThemeProvider theme={theme}>
       <>
@@ -192,7 +186,7 @@ const App = () => {
                 <Route path='/' element={<QuizHome />}/>
                 <Route path='/mypage/' element={<UserPage removeLike={removeLike}/>}/>
                 <Route path='/users' element={<Users />}/>
-                <Route path='/users/:id' element={<User individualUser={individualUser}/>}/>
+                <Route path='/users/:userId' element={<User />}/>
                 <Route path='/quizzes/:quizId' element={
                   <QuizView
                     addLike={addLike}

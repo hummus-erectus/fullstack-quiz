@@ -4,6 +4,7 @@ import quizReducer from './reducers/quizReducer'
 import questionsReducer from './reducers/questionsReducer'
 import userReducer from './reducers/userReducer'
 import usersReducer from './reducers/usersReducer'
+import activeQuizReducer from './reducers/activeQuizReducer'
 
 const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ const store = configureStore({
     quiz: quizReducer,
     question: questionsReducer,
     user: userReducer,
-    users: usersReducer
+    users: usersReducer,
+    activeQuiz: activeQuizReducer,
   }
 })
 

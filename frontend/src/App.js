@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
-import { newLike, unLike, removeQuiz, newComment } from './reducers/quizReducer'
+import { unLike, removeQuiz } from './reducers/quizReducer'
 import { createQuestion, removeQuestionAction } from './reducers/questionsReducer'
 import { removeUser, userLogin, updateUser } from './reducers/userReducer'
 import { Routes, Route } from 'react-router-dom'
@@ -79,16 +79,6 @@ const App = () => {
 
   const handleSignUp = () => setShowLoginForm(true)
 
-  const addLike = async (id) => {
-    const quiz = quizzes.find((n) => n.id === id)
-    try {
-      await dispatch(newLike(id))
-      dispatch(setNotification(`You liked "${quiz.title}"`, 'success', 5))
-    } catch (error) {
-      dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
-    }
-  }
-
   const removeLike = async (id) => {
     const quiz = quizzes.find((n) => n.id === id)
     try {
@@ -97,16 +87,6 @@ const App = () => {
       dispatch(updateUser(user.id))
     } catch (error) {
       dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
-    }
-  }
-
-  const addComment = async (id, content) => {
-    console.log(content)
-    try {
-      await dispatch(newComment(id, content))
-      dispatch(setNotification('Comment added', 'success', 5))
-    } catch (error) {
-      dispatch(setNotification(error.message, 'error', 5))
     }
   }
 
@@ -189,10 +169,7 @@ const App = () => {
                 <Route path='/users/:userId' element={<User />}/>
                 <Route path='/quizzes/:quizId' element={
                   <QuizView
-                    addLike={addLike}
-                    removeLike={removeLike}
                     deleteQuiz={deleteQuiz}
-                    addComment={addComment}
                     addQuestion={addQuestion}
                     removeQuestion={removeQuestion}
                   />

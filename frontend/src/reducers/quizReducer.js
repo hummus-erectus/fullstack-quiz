@@ -69,17 +69,7 @@ export const removeQuiz = (id) => {
   }
 }
 
-export const updateQuiz = (id, changedQuiz) => {
-  return async (dispatch) => {
-    try {
-      const updatedQuiz = await quizService.update(id, changedQuiz)
-      dispatch(update({ id, changedQuiz: updatedQuiz }))
-    } catch (error) {
-      // Handle error, e.g., display a notification or show an error message
-      console.log('Error updating quiz:', error)
-    }
-  }
-}
+
 
 
 export default quizSlice.reducer

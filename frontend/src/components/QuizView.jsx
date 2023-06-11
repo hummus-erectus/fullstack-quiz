@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useState, useRef, useEffect } from 'react'
+import { setNotification } from '../reducers/notificationReducer'
 import Togglable from './Togglable'
 import { Button } from './styles/Button.styled'
 import { ButtonAlt } from './styles/ButtonAlt.styled'
@@ -8,48 +9,34 @@ import { StyledQuizView } from './styles/QuizView.styled'
 import QuestionForm from './QuestionForm'
 import PlayQuiz from './PlayQuiz'
 import EditableField from './EditableField'
-import { updateQuiz } from '../reducers/quizReducer'
-import { initializeQuestions } from '../reducers/questionsReducer'
+import { updateQuiz, newComment, newLike, unLike, initializeQuiz } from '../reducers/activeQuizReducer'
 import QuestionTogglable from './QuestionTogglable'
-import quizzes from '../services/quizzes'
 
-const QuizView = ({ addLike, removeLike, deleteQuiz, addComment, addQuestion, removeQuestion }) => {
+const QuizView = ({ deleteQuiz, addQuestion, removeQuestion }) => {
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true)
   const user = useSelector(({ user }) => user)
-  const questions = useSelector(({ question }) => question)
   const navigate = useNavigate()
   const questionFormRef = useRef()
   const dispatch = useDispatch()
 
   const { quizId } = useParams()
 
-  const [quiz, setQuiz] = useState(null)
-
+  const quiz = useSelector(({ activeQuiz }) => activeQuiz)
 
   const [originalTitle, setOriginalTitle] = useState('')
   const [originalDescription, setOriginalDescription] = useState('')
 
   useEffect(() => {
-    const fetchIndividualQuiz = async () => {
-      const fetchedQuiz = await quizzes.getIndividual(quizId)
-      setQuiz(fetchedQuiz)
-    }
-    fetchIndividualQuiz()
-  }, [quizId])
-
-  useEffect(() => {
-    if (quiz) {
-      setIsLoadingQuestions(true)
-      dispatch(initializeQuestions(quiz.id))
-        .then(() => {
-          setIsLoadingQuestions(false)
-        })
-        .catch((error) => {
-          setIsLoadingQuestions(false)
-          console.error(error)
-        })
-    }
-  }, [dispatch, quiz])
+    setIsLoadingQuestions(true)
+    dispatch(initializeQuiz(quizId))
+      .then(() => {
+        setIsLoadingQuestions(false)
+      })
+      .catch((error) => {
+        setIsLoadingQuestions(false)
+        console.error(error)
+      })
+  }, [quizId, dispatch])
 
   useEffect(() => {
     if (quiz) {
@@ -72,10 +59,31 @@ const QuizView = ({ addLike, removeLike, deleteQuiz, addComment, addQuestion, re
 
   const [comment, setComment] = useState('')
 
-  const newComment = async (event) => {
+  const addLike = async (id) => {
+    try {
+      await dispatch(newLike(id))
+      dispatch(initializeQuiz(quizId))
+      dispatch(setNotification(`You liked "${quiz.title}"`, 'success', 5))
+    } catch (error) {
+      dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
+    }
+  }
+
+  const removeLike = async (id) => {
+    try {
+      await dispatch(unLike(id))
+      dispatch(setNotification(`You unliked "${quiz.title}"`, 'success', 5))
+      dispatch(initializeQuiz(quizId))
+    } catch (error) {
+      dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
+    }
+  }
+
+  const addComment = async (event) => {
     event.preventDefault()
-    addComment(quiz.id, comment)
+    await dispatch(newComment(quiz.id, comment))
     setComment('')
+    dispatch(initializeQuiz(quizId))
   }
 
   if (!quiz) {
@@ -91,7 +99,7 @@ const QuizView = ({ addLike, removeLike, deleteQuiz, addComment, addQuestion, re
   }
 
   if (startQuiz) {
-    return <PlayQuiz questions={questions} />
+    return <PlayQuiz questions={quiz.questions} />
   }
 
 
@@ -124,14 +132,14 @@ const QuizView = ({ addLike, removeLike, deleteQuiz, addComment, addQuestion, re
 
       <p>Added by <Link to={`/users/${user.id}`} className="username">{quiz.user.username}</Link></p>
 
-      <p>{questions.length} {questions.length === 1 ? 'question' : 'questions'}</p>
+      <p>{quiz.questions.length} {quiz.questions.length === 1 ? 'question' : 'questions'}</p>
 
-      {questions.length > 0 && (
+      {quiz.questions.length > 0 && (
         <>
           <Button onClick={handleStartQuiz}>Start quiz</Button>
           <Togglable buttonLabel="See questions">
             {
-              questions.map((question) => (
+              quiz.questions.map((question) => (
                 <QuestionTogglable key={question._id} label={question.content}>
                   <p>
                     {question.options.map((option) => (
@@ -184,7 +192,7 @@ const QuizView = ({ addLike, removeLike, deleteQuiz, addComment, addQuestion, re
         ) : (
           <p className="noComments">No comments yet</p>
         )}
-        <form onSubmit={newComment}>
+        <form onSubmit={addComment}>
           <input
             id="commentInput"
             type="text"

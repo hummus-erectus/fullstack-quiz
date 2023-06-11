@@ -47,7 +47,7 @@ usersRouter.get('/', async (request, response) => {
 })
 
 usersRouter.get('/:id', async (request, response) => {
-  const user = await User.findById(request.params.id).populate('quizzes', 'title');
+  const user = await User.findById(request.params.id).populate('quizzes', 'title').populate('likedQuizzes', 'title');
   if (user) {
     response.json(user);
   } else {

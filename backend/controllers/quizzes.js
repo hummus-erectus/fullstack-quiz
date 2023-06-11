@@ -15,7 +15,7 @@ quizzesRouter.get('/', async (request, response) => {
 
 
 quizzesRouter.get('/:id', async (request, response) => {
-  const quiz = await Quiz.findById(request.params.id).populate('user', 'username _id');
+  const quiz = await Quiz.findById(request.params.id).populate('user', 'username _id').populate('questions', 'content options correctAnswer');
   if (quiz) {
     response.json(quiz);
   } else {

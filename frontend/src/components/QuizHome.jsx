@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { initializeQuizzes, createQuiz } from '../reducers/quizReducer'
@@ -10,9 +10,21 @@ const QuizHome = () => {
   const quizFormRef = useRef()
   const dispatch = useDispatch()
   const quizzes = useSelector(({ quiz }) => quiz)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    dispatch(initializeQuizzes())
+    const fetchQuizzes = async () => {
+      setIsLoading(true)
+      try {
+        await dispatch(initializeQuizzes())
+      } catch (error) {
+        dispatch(setNotification(error.message, 'error', 5))
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchQuizzes()
   }, [dispatch])
 
   const addQuiz = async (quizObject) => {
@@ -23,6 +35,10 @@ const QuizHome = () => {
     } catch (error) {
       dispatch(setNotification(error.message, 'error', 5))
     }
+  }
+
+  if (isLoading) {
+    return <p>Loading quizzes...</p>
   }
 
   return (

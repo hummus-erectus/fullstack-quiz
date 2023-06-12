@@ -6,14 +6,26 @@ import UserQuizList from './UserQuizList'
 const User = () => {
   const { userId } = useParams()
   const [user, setUser] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchIndividualUser = async () => {
-      const fetchedUser = await users.getIndividual(userId)
-      setUser(fetchedUser)
+      setIsLoading(true)
+      try {
+        const fetchedUser = await users.getIndividual(userId)
+        setUser(fetchedUser)
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setIsLoading(false)
+      }
     }
     fetchIndividualUser()
   }, [userId])
+
+  if (isLoading) {
+    return <p>Loading user data...</p>
+  }
 
   if (!user) {
     return null

@@ -58,6 +58,13 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion }) => {
     await dispatch(updateQuiz(quiz.id, changedQuiz))
   }
 
+  const handleDeleteQuiz = async (id) => {
+    if (window.confirm('Do you really want to delete this quiz?')) {
+      await deleteQuiz(id)
+      navigate('/')
+    }
+  }
+
   const [startQuiz, setStartQuiz] = useState(false)
 
   const [comment, setComment] = useState('')
@@ -163,12 +170,7 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion }) => {
       )}
 
       {quiz.user.username === user.username && (
-        <ButtonAlt
-          onClick={() => {
-            deleteQuiz(quiz.id)
-            navigate('/')
-          }}
-        >
+        <ButtonAlt onClick={() => handleDeleteQuiz(quiz.id)}>
           Remove quiz
         </ButtonAlt>
       )}

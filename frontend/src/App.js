@@ -94,14 +94,13 @@ const App = () => {
   const deleteQuiz = async (id) => {
     const quiz = quizzes.find((n) => n.id === id)
 
-    if (window.confirm(`Do you really want to delete ${quiz.title}?`)) {
-      try {
-        await dispatch(removeQuiz(id))
-        dispatch(setNotification(`Successfully removed ${quiz.title}`, 'success', 5))
-      } catch (error) {
-        dispatch(setNotification(error.message, 'error', 5))
-      }
+    try {
+      await dispatch(removeQuiz(id))
+      dispatch(setNotification(`Successfully removed ${quiz.title}`, 'success', 5))
+    } catch (error) {
+      dispatch(setNotification(error.message, 'error', 5))
     }
+
   }
 
   // Question dispatch functions

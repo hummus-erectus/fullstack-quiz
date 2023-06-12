@@ -9,8 +9,6 @@ const LikedQuizList = ({ individualUser, removeLike }) => {
     return null
   }
 
-  console.log(user)
-
   return (
     <StyledQuizList>
       <h3>Liked quizzes</h3>

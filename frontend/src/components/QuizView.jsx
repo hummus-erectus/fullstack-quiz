@@ -127,7 +127,7 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion }) => {
         </>
       }
 
-      <p>Added by <Link to={`/users/${user.id}`} className="username">{quiz.user.username}</Link></p>
+      <p>Added by <Link to={`/users/${quiz.user.id}`} className="username">{quiz.user.username}</Link></p>
 
       <p>{quiz.questions.length} {quiz.questions.length === 1 ? 'question' : 'questions'}</p>
 

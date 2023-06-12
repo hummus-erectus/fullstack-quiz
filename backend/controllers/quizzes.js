@@ -69,7 +69,7 @@ quizzesRouter.post('/:id/like', async (request, response) => {
 
     quiz.likedBy.push(userId);
     const savedQuiz = await quiz.save();
-    const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id');
+    const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id').populate('questions', 'content options correctAnswer');
 
     const user = await User.findById(userId);
     user.likedQuizzes.push(quizId);
@@ -99,7 +99,7 @@ quizzesRouter.post('/:id/unlike', async (request, response) => {
 
     quiz.likedBy = quiz.likedBy.filter((likedUserId) => likedUserId.toString() !== userId);
     const savedQuiz = await quiz.save();
-    const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id');
+    const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id').populate('questions', 'content options correctAnswer');
 
     const user = await User.findById(userId);
     user.likedQuizzes = user.likedQuizzes.filter((likedQuizId) => likedQuizId.toString() !== quizId);
@@ -153,7 +153,7 @@ quizzesRouter.put('/:id', async (request, response, next) => {
 
     const savedQuiz = await quiz.save();
 
-    const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id');
+    const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id').populate('questions', 'content options correctAnswer');
 
     response.status(200).json(populatedQuiz);
   } catch (error) {
@@ -181,7 +181,7 @@ quizzesRouter.post('/:id/comments', async (request, response) => {
 
   const savedQuiz = await quiz.save()
 
-  const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id');
+  const populatedQuiz = await Quiz.findById(savedQuiz._id).populate('user', 'username _id').populate('questions', 'content options correctAnswer');
 
   response.status(201).json(populatedQuiz);
 });

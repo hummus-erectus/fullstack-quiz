@@ -62,7 +62,6 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion }) => {
   const addLike = async (id) => {
     try {
       await dispatch(newLike(id))
-      dispatch(initializeQuiz(quizId))
       dispatch(setNotification(`You liked "${quiz.title}"`, 'success', 5))
     } catch (error) {
       dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
@@ -73,7 +72,6 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion }) => {
     try {
       await dispatch(unLike(id))
       dispatch(setNotification(`You unliked "${quiz.title}"`, 'success', 5))
-      dispatch(initializeQuiz(quizId))
     } catch (error) {
       dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
     }
@@ -83,7 +81,6 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion }) => {
     event.preventDefault()
     await dispatch(newComment(quiz.id, comment))
     setComment('')
-    dispatch(initializeQuiz(quizId))
   }
 
   if (!quiz) {

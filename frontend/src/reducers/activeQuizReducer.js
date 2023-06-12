@@ -25,22 +25,37 @@ export const initializeQuiz = (id) => {
 
 export const newLike = (id) => {
   return async (dispatch) => {
-    const updatedQuiz = await quizService.addLike(id)
-    dispatch(update({ id, changedQuiz: updatedQuiz }))
+    try {
+      const updatedQuiz = await quizService.addLike(id)
+      dispatch(setQuiz(updatedQuiz))
+    } catch (error) {
+      // Handle error
+      console.log('Error adding like:', error)
+    }
   }
 }
 
 export const unLike = (id) => {
   return async (dispatch) => {
-    const updatedQuiz = await quizService.removeLike(id)
-    dispatch(update({ id, changedQuiz: updatedQuiz }))
+    try {
+      const updatedQuiz = await quizService.removeLike(id)
+      dispatch(setQuiz(updatedQuiz))
+    } catch (error) {
+      // Handle error
+      console.log('Error removing like:', error)
+    }
   }
 }
 
 export const newComment = (id, content) => {
   return async (dispatch) => {
-    const addedComment = await quizService.createComment(id, { content: content })
-    dispatch(update({ id, changedQuiz: addedComment }))
+    try {
+      const addedComment = await quizService.createComment(id, { content: content })
+      dispatch(setQuiz(addedComment))
+    } catch (error) {
+      // Handle error
+      console.log('Error adding comment:', error)
+    }
   }
 }
 

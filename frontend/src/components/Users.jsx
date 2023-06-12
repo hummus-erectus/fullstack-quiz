@@ -5,15 +5,19 @@ import { Table } from './styles/Table.styled'
 
 const Users = () => {
   const [users, setUsers] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
     const fetchUsers = async () => {
+      setIsLoading(true)
       try {
         const usersData = await userService.getAll()
         setUsers(usersData)
       } catch (error) {
         console.log(error)
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -22,6 +26,10 @@ const Users = () => {
 
   const handleRowClick = (id) => {
     navigate(`/users/${id}`)
+  }
+
+  if (isLoading) {
+    return <p>Loading user data...</p>
   }
 
   return (

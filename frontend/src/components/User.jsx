@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import users from '../services/users'
 import UserQuizList from './UserQuizList'
 
@@ -7,6 +7,7 @@ const User = () => {
   const { userId } = useParams()
   const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchIndividualUser = async () => {
@@ -16,6 +17,7 @@ const User = () => {
         setUser(fetchedUser)
       } catch (error) {
         console.log(error)
+        navigate('/404')
       } finally {
         setIsLoading(false)
       }

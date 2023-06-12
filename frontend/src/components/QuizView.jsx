@@ -27,16 +27,19 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion }) => {
   const [originalDescription, setOriginalDescription] = useState('')
 
   useEffect(() => {
-    setIsLoadingQuestions(true)
-    dispatch(initializeQuiz(quizId))
-      .then(() => {
+    const fetchData = async () => {
+      setIsLoadingQuestions(true)
+      try {
+        await dispatch(initializeQuiz(quizId))
         setIsLoadingQuestions(false)
-      })
-      .catch((error) => {
+      } catch (error) {
         setIsLoadingQuestions(false)
         console.error(error)
-      })
-  }, [quizId, dispatch])
+        navigate('/404')
+      }
+    }
+    fetchData()
+  }, [quizId, dispatch, navigate])
 
   useEffect(() => {
     if (quiz) {

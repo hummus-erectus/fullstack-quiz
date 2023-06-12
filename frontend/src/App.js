@@ -4,7 +4,7 @@ import { setNotification } from './reducers/notificationReducer'
 import { unLike, removeQuiz } from './reducers/quizReducer'
 import { createQuestion, removeQuestionAction } from './reducers/questionsReducer'
 import { removeUser, userLogin, updateUser } from './reducers/userReducer'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import UserPage from './components/UserPage'
 import loginService from './services/login'
@@ -21,6 +21,7 @@ import { Container } from './components/styles/Container.styled'
 import SignUpForm from './components/SignUpForm'
 import { Button } from './components/styles/Button.styled'
 import QuizHome from './components/QuizHome'
+import NotFound from './components/NotFound'
 
 const theme = {
   colors: {
@@ -174,7 +175,8 @@ const App = () => {
                     removeQuestion={removeQuestion}
                   />
                 }/>
-
+                <Route path="*" element={<Navigate to="/404" />} />
+                <Route path="/404" element={<NotFound />} />
               </Routes>
             </>
           )}

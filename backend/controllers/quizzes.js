@@ -113,21 +113,52 @@ quizzesRouter.post('/:id/unlike', async (request, response) => {
 
 
 quizzesRouter.delete('/:id', async (request, response) => {
-  const quiz = await Quiz.findById(request.params.id);
-
+  const quizId = request.params.id;
   const user = request.user;
 
-  if (!user || quiz.user.toString() !== user.id.toString()) {
-    return response.status(401).json({ error: 'Operation not permitted' });
+  try {
+    console.log('Deleting quiz:', quizId);
+
+    const quiz = await Quiz.findById(quizId);
+
+    if (!quiz) {
+      return response.status(404).json({ error: 'Quiz not found' });
+    }
+
+    if (quiz.user.toString() !== user.id.toString()) {
+      return response.status(401).json({ error: 'Operation not permitted' });
+    }
+
+    // Remove the quiz from the user who created it
+    await User.findOneAndUpdate(
+      { _id: user.id },
+      { $pull: { quizzes: quiz.id } }
+    );
+
+    // Find all users who have liked the quiz
+    const users = await User.find({ likedQuizzes: quizId });
+
+    console.log('Users who liked the quiz:', users);
+
+    // Remove the quiz from the likedQuizzes array of all users who have liked it
+    const updatePromises = users.map(async (likedUser) => {
+      await User.findOneAndUpdate(
+        { _id: likedUser.id },
+        { $pull: { likedQuizzes: quizId } }
+      );
+    });
+
+    await Promise.all(updatePromises);
+
+    await quiz.remove();
+
+    response.status(204).end();
+  } catch (error) {
+    console.log('Error deleting quiz:', error);
+    response.status(500).json({ error: 'Internal server error' });
   }
-
-  user.quizzes = user.quizzes.filter(q => q.toString() !== quiz.id.toString());
-
-  await user.save();
-  await quiz.remove();
-
-  response.status(204).end();
 });
+
 
 quizzesRouter.put('/:id', async (request, response, next) => {
   const { title, description } = request.body;

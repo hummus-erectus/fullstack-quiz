@@ -5,7 +5,7 @@ import { MdRemoveCircleOutline } from 'react-icons/md'
 const LikedQuizList = ({ individualUser, removeLike }) => {
   const user = individualUser
 
-  if (!user) {
+  if (!user || !user.likedQuizzes || user.likedQuizzes.length === 0) {
     return null
   }
 

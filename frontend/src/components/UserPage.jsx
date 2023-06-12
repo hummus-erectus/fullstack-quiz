@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import LikedQuizList from './LikedQuizList'
 import { updateUser } from '../reducers/userReducer'
@@ -7,13 +7,20 @@ import { updateUser } from '../reducers/userReducer'
 const UserPage = ({ removeLike }) => {
   const dispatch = useDispatch()
   const user = useSelector(({ user }) => user)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    dispatch(updateUser(user.id))
-  }, [dispatch])
+    const fetchUser = async () => {
+      setIsLoading(true)
+      await dispatch(updateUser(user.id))
+      setIsLoading(false)
+    }
 
-  if (!user) {
-    return null
+    fetchUser()
+  }, [dispatch, user.id])
+
+  if (isLoading || !user) {
+    return <p>Loading user data...</p>
   }
 
   return (

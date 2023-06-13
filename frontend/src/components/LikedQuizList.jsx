@@ -2,7 +2,7 @@ import { StyledQuizList } from './styles/QuizList.styled'
 import { Link } from 'react-router-dom'
 import { MdRemoveCircleOutline } from 'react-icons/md'
 
-const LikedQuizList = ({ individualUser, removeLike }) => {
+const LikedQuizList = ({ individualUser, removeLike, editable }) => {
   const user = individualUser
 
   if (!user || !user.likedQuizzes || user.likedQuizzes.length === 0) {
@@ -25,9 +25,9 @@ const LikedQuizList = ({ individualUser, removeLike }) => {
               <Link to={`/quizzes/${quiz.id}`}>
                 <span className="quizTitle">{quiz.title}</span>
               </Link>
-              <span onClick={() => handleRemoveLike(quiz.id)} className="clickable-icon">
+              {editable && <span onClick={() => handleRemoveLike(quiz.id)} className="clickable-icon">
                 <MdRemoveCircleOutline />
-              </span>
+              </span>}
             </li>
           ))}
       </ul>

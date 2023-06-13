@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import users from '../services/users'
 import UserQuizList from './UserQuizList'
+import LikedQuizList from './LikedQuizList'
 
 const User = () => {
   const { userId } = useParams()
@@ -37,6 +38,7 @@ const User = () => {
     <>
       <h2>{user.username}</h2>
       <UserQuizList user={user} />
+      <LikedQuizList individualUser={user} />
     </>
   )
 }

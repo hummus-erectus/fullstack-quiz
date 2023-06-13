@@ -27,7 +27,7 @@ const UserPage = ({ removeLike }) => {
     <>
       <h2>Welcome, {user.username}</h2>
       <UserQuizList user={user}/>
-      <LikedQuizList individualUser={user} removeLike={removeLike}/>
+      <LikedQuizList individualUser={user} removeLike={removeLike} editable/>
     </>
   )
 }

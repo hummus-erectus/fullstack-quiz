@@ -82,12 +82,14 @@ const App = () => {
 
   const removeLike = async (id) => {
     const quiz = quizzes.find((n) => n.id === id)
-    try {
-      await dispatch(unLike(id))
-      dispatch(setNotification(`You unliked "${quiz.title}"`, 'success', 5))
-      dispatch(updateUser(user.id))
-    } catch (error) {
-      dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
+    if (quiz) {
+      try {
+        await dispatch(unLike(id))
+        dispatch(setNotification(`You unliked "${quiz.title}"`, 'success', 5))
+        dispatch(updateUser(user.id))
+      } catch (error) {
+        dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
+      }
     }
   }
 

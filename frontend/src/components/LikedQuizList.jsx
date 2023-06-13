@@ -9,6 +9,12 @@ const LikedQuizList = ({ individualUser, removeLike }) => {
     return null
   }
 
+  const handleRemoveLike = (id) => {
+    if (window.confirm('Do you really want to unlike this quiz?')) {
+      removeLike(id)
+    }
+  }
+
   return (
     <StyledQuizList>
       <h3>Liked quizzes</h3>
@@ -19,7 +25,7 @@ const LikedQuizList = ({ individualUser, removeLike }) => {
               <Link to={`/quizzes/${quiz.id}`}>
                 <span className="quizTitle">{quiz.title}</span>
               </Link>
-              <span onClick={() => removeLike(quiz.id)} className="clickable-icon">
+              <span onClick={() => handleRemoveLike(quiz.id)} className="clickable-icon">
                 <MdRemoveCircleOutline />
               </span>
             </li>

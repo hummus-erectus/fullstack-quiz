@@ -30,7 +30,11 @@ const create = async (quizId, newObject) => {
 }
 
 const update = async (id, updatedObject) => {
-  const response = await axios.put(`${baseUrl}/question/${id}`, updatedObject)
+  const config = {
+    headers: { Authorization: tokenService.getToken() },
+  }
+
+  const response = await axios.put(`${baseUrl}/question/${id}`, updatedObject, config)
   return response.data
 }
 

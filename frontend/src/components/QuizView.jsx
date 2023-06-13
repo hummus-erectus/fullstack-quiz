@@ -11,12 +11,14 @@ import PlayQuiz from './PlayQuiz'
 import EditableField from './EditableField'
 import { updateQuiz, newComment, newLike, unLike, initializeQuiz } from '../reducers/activeQuizReducer'
 import QuestionTogglable from './QuestionTogglable'
+import EditQuestionForm from './EditQuestionForm'
 
-const QuizView = ({ deleteQuiz, addQuestion, removeQuestion }) => {
+const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) => {
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true)
   const user = useSelector(({ user }) => user)
   const navigate = useNavigate()
   const questionFormRef = useRef()
+  const editQuestionFormRef = useRef()
   const dispatch = useDispatch()
 
   const { quizId } = useParams()
@@ -87,6 +89,18 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion }) => {
     }
   }
 
+  const handleEditQuestionSave = async () => {
+    if (editQuestionFormRef.current) {
+      editQuestionFormRef.current.toggleVisibility() // Call the toggleVisibility function on the Togglable ref
+    }
+    try {
+      await dispatch(initializeQuiz(quizId))
+    } catch (error) {
+      console.error(error)
+      navigate('/404')
+    }
+  }
+
   const addComment = async (event) => {
     event.preventDefault()
     await dispatch(newComment(quiz.id, comment))
@@ -148,11 +162,20 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion }) => {
             {
               quiz.questions.map((question) => (
                 <QuestionTogglable key={question._id} label={question.content}>
-                  <p>
+                  <ul className="options">
                     {question.options.map((option) => (
-                      <span key={option.optionId}>{option.content} </span>
+                      <li className="option" key={option.optionId}>{option.content} </li>
                     ))}
-                  </p>
+                  </ul>
+                  {quiz.user.username === user.username && (
+                    <Togglable buttonLabel="Edit question" ref={editQuestionFormRef}>
+                      <EditQuestionForm
+                        question={question}
+                        updateQuestion={updateQuestion}
+                        onSave={handleEditQuestionSave} // Pass the onSave callback
+                      />
+                    </Togglable>
+                  )}
                   {quiz.user.username === user.username &&
                     <Button onClick={() => removeQuestion(question._id, quiz.id)}>Remove Question</Button>
                   }

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { unLike, removeQuiz } from './reducers/quizReducer'
-import { createQuestion, removeQuestionAction } from './reducers/questionsReducer'
+import { createQuestion, removeQuestionAction, updateQuestionAction } from './reducers/questionsReducer'
 import { removeUser, userLogin, updateUser } from './reducers/userReducer'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
@@ -116,14 +116,14 @@ const App = () => {
     }
   }
 
-  // const updateQuestion = async (questionId, updatedQuestion) => {
-  //   try {
-  //     await dispatch(updateQuestionAction(questionId, updatedQuestion)) // Dispatch updateQuestionAction with questionId and updatedQuestion
-  //     dispatch(setNotification('Question updated', 'success', 5))
-  //   } catch (error) {
-  //     dispatch(setNotification(error.message, 'error', 5))
-  //   }
-  // }
+  const updateQuestion = async (questionId, updatedQuestion) => {
+    try {
+      await dispatch(updateQuestionAction(questionId, updatedQuestion)) // Dispatch updateQuestionAction with questionId and updatedQuestion
+      dispatch(setNotification('Question updated', 'success', 5))
+    } catch (error) {
+      dispatch(setNotification(error.message, 'error', 5))
+    }
+  }
 
   const removeQuestion = async (questionId, quizId) => {
     try {
@@ -173,6 +173,7 @@ const App = () => {
                   <QuizView
                     deleteQuiz={deleteQuiz}
                     addQuestion={addQuestion}
+                    updateQuestion={updateQuestion}
                     removeQuestion={removeQuestion}
                   />
                 }/>

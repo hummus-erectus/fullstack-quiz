@@ -1,5 +1,4 @@
 import { useState, forwardRef, useImperativeHandle } from 'react'
-// import PropTypes from 'prop-types'
 import { StyledQuestionTogglable } from './styles/QuestionTogglable.styled'
 
 const QuestionTogglable = forwardRef((props, refs) => {
@@ -35,10 +34,6 @@ const QuestionTogglable = forwardRef((props, refs) => {
     </StyledQuestionTogglable>
   )
 })
-
-// QuestionTogglable.propTypes = {
-//   buttonLabel: PropTypes.string.isRequired,
-// }
 
 QuestionTogglable.displayName = 'QuestionTogglable'
 

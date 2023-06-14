@@ -58,7 +58,10 @@ const EditQuestionForm = ({ question, updateQuestion, onSave }) => {
 
     const options = [
       { optionId: 1, content: correctAnswer },
-      ...filteredIncorrectAnswers,
+      ...filteredIncorrectAnswers.map((answer, index) => ({
+        optionId: index + 2,
+        content: answer.content,
+      })),
     ]
 
     updateQuestion(question._id, {

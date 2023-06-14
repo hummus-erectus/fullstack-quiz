@@ -18,7 +18,7 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
   const user = useSelector(({ user }) => user)
   const navigate = useNavigate()
   const questionFormRef = useRef()
-  const editQuestionFormRef = useRef()
+  const editQuestionFormRefs = useRef({})
   const dispatch = useDispatch()
 
   const { quizId } = useParams()
@@ -89,16 +89,20 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
     }
   }
 
-  const handleEditQuestionSave = async () => {
-    if (editQuestionFormRef.current) {
-      editQuestionFormRef.current.toggleVisibility() // Call the toggleVisibility function on the Togglable ref
+  const handleEditQuestionSave = async (questionId) => {
+    const editQuestionFormRef = editQuestionFormRefs.current[questionId]
+
+    if (editQuestionFormRef) {
+      editQuestionFormRef.toggleVisibility()
     }
+
     try {
       await dispatch(initializeQuiz(quizId))
     } catch (error) {
       console.error(error)
       navigate('/404')
     }
+
   }
 
   const addComment = async (event) => {
@@ -164,15 +168,15 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
                 <QuestionTogglable key={question._id} label={question.content}>
                   <ul className="options">
                     {question.options.map((option) => (
-                      <li className="option" key={option.optionId}>{option.content} </li>
+                      <li className="option" key={`${question._id}-${option.optionId}`}>{option.content} </li>
                     ))}
                   </ul>
                   {quiz.user.username === user.username && (
-                    <Togglable buttonLabel="Edit question" ref={editQuestionFormRef}>
+                    <Togglable buttonLabel="Edit question" ref={(ref) => (editQuestionFormRefs.current[question._id] = ref)}>
                       <EditQuestionForm
                         question={question}
                         updateQuestion={updateQuestion}
-                        onSave={handleEditQuestionSave} // Pass the onSave callback
+                        onSave={() => handleEditQuestionSave(question._id)} // Pass the onSave callback
                       />
                     </Togglable>
                   )}

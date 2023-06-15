@@ -14,8 +14,15 @@ export const StyledQuestionTogglable = styled.div`
 .options {
   width: 100%;
   display: flex;
+  gap: 2em;
   justify-content: space-between;
   color: red;
   background: lightblue;
+}
+
+.option {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 `

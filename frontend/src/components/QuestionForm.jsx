@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { Button } from './styles/Button.styled'
+import { MdRemoveCircleOutline, MdAddCircleOutline } from 'react-icons/md'
+import { StyledQuestionForm } from './styles/QuestionForm.styled'
 
 const QuestionForm = ({ addQuestion, quizId }) => {
   const [question, setQuestion] = useState('')
@@ -63,7 +65,7 @@ const QuestionForm = ({ addQuestion, quizId }) => {
   }
 
   return (
-    <div>
+    <StyledQuestionForm>
       <h2>Add Question</h2>
       <form onSubmit={submitQuiz}>
         <label htmlFor="questionInput">Question:</label>
@@ -90,24 +92,24 @@ const QuestionForm = ({ addQuestion, quizId }) => {
               onChange={(event) => handleIncorrectAnswerChange(index, event.target.value)}
             />
             {index > 0 && (
-              <Button type="button" onClick={() => handleRemoveIncorrectAnswer(index)}>
-                Remove
-              </Button>
+              <span onClick={() => handleRemoveIncorrectAnswer(index)} className="inline-icon">
+                <MdRemoveCircleOutline className="clickable-icon"/>
+              </span>
             )}
           </div>
         ))}
 
         {incorrectAnswers.length < 10 && (
-          <Button type="button" onClick={handleAddIncorrectAnswer}>
-            Add Incorrect Answer
-          </Button>
+          <span onClick={handleAddIncorrectAnswer} className="inline-icon">
+            <MdAddCircleOutline className="clickable-icon"/>
+          </span>
         )}
 
         <Button type="submit" className="submitButton">
           Add question
         </Button>
       </form>
-    </div>
+    </StyledQuestionForm>
   )
 }
 

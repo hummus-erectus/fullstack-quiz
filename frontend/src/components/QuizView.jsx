@@ -111,6 +111,15 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
     setComment('')
   }
 
+  const shuffleArray = (array) => {
+    const newArray = [...array]
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]]
+    }
+    return newArray
+  }
+
   if (!quiz) {
     return null
   }
@@ -167,8 +176,10 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
               quiz.questions.map((question) => (
                 <QuestionTogglable key={question._id} label={question.content}>
                   <ul className="options">
-                    {question.options.map((option) => (
-                      <li className="option" key={`${question._id}-${option.optionId}`}>{option.content} </li>
+                    {shuffleArray(question.options).map((option) => (
+                      <li className="option" key={`${question._id}-${option.optionId}`}>
+                        {option.content}
+                      </li>
                     ))}
                   </ul>
                   {quiz.user.username === user.username && (

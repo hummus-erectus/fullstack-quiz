@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button } from './styles/Button.styled'
 import { Form } from './styles/Form.styled'
 import signupService from '../services/signup'
@@ -7,9 +7,10 @@ import { setNotification } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
 
 
-const SignUpForm = ({ handleSignUp }) => {
+const SignUpForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
@@ -18,7 +19,6 @@ const SignUpForm = ({ handleSignUp }) => {
 
     try {
       await signupService.signup({ username, password })
-      handleSignUp()
       dispatch(setNotification(`${username} successfully signed up!`, 'success', 5))
     } catch (error) {
       dispatch(setNotification(error.message, 'error', 5))
@@ -59,12 +59,10 @@ const SignUpForm = ({ handleSignUp }) => {
         </div>
         <Button type='submit'>Sign up</Button>
       </form>
+      <Button onClick={() => navigate('/login')}>Login</Button>
+
     </Form>
   )
-}
-
-SignUpForm.propTypes = {
-  handleSignUp: PropTypes.func.isRequired,
 }
 
 export default SignUpForm

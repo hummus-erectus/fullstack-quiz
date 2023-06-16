@@ -145,7 +145,7 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
 
   return (
     <StyledQuizView>
-      {quiz.user.username === user.username ?
+      {user && quiz.user.username === user.username ?
         <>
           <EditableField
             initialValue={quiz.title}
@@ -188,7 +188,7 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
                       </li>
                     ))}
                   </ul>
-                  {quiz.user.username === user.username && (
+                  {user && quiz.user.username === user.username && (
                     <Togglable buttonLabel="Edit question" ref={(ref) => (editQuestionFormRefs.current[question._id] = ref)}>
                       <EditQuestionForm
                         question={question}
@@ -197,7 +197,7 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
                       />
                     </Togglable>
                   )}
-                  {quiz.user.username === user.username &&
+                  {user && quiz.user.username === user.username &&
                     <Button onClick={() => handleDeleteQuestion(question._id, quiz.id)}>Remove Question</Button>
                   }
                 </QuestionTogglable>
@@ -207,13 +207,13 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
         </>
       )}
 
-      {quiz.user.username === user.username && (
+      {user && quiz.user.username === user.username && (
         <Togglable buttonLabel="Add question" ref={questionFormRef}>
           <QuestionForm addQuestion={addQuestion} quizId={quiz.id}/>
         </Togglable>
       )}
 
-      {quiz.user.username === user.username && (
+      {user && quiz.user.username === user.username && (
         <ButtonAlt onClick={() => handleDeleteQuiz(quiz.id)}>
           Remove quiz
         </ButtonAlt>
@@ -221,11 +221,15 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
 
       <p>
         {quiz.likedBy ? quiz.likedBy.length : '0'} likes{' '}
-        {quiz.likedBy && quiz.likedBy.includes(user.id) ? (
-          <Button onClick={() => removeLike(quiz.id)}>Unlike</Button>
-        ) : (
-          <Button onClick={() => addLike(quiz.id)}>Like</Button>
-        )}
+        {user?
+          (quiz.likedBy && quiz.likedBy.includes(user.id) ? (
+            <Button onClick={() => removeLike(quiz.id)}>Unlike</Button>
+          ) : (
+            <Button onClick={() => addLike(quiz.id)}>Like</Button>
+          )) : (
+            null
+          )
+        }
       </p>
       <div className="commentsContainer">
         <h3>Comments</h3>

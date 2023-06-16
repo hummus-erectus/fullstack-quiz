@@ -19,7 +19,6 @@ import GlobalStyles from './components/styles/Global'
 import { ThemeProvider } from 'styled-components'
 import { Container } from './components/styles/Container.styled'
 import SignUpForm from './components/SignUpForm'
-import { Button } from './components/styles/Button.styled'
 import QuizHome from './components/QuizHome'
 import NotFound from './components/NotFound'
 
@@ -38,7 +37,6 @@ const theme = {
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [showLoginForm, setShowLoginForm] = useState(true)
 
   const dispatch = useDispatch()
   const quizzes = useSelector(({ quiz }) => quiz)
@@ -77,8 +75,6 @@ const App = () => {
     window.localStorage.removeItem('loggedQuizUser')
     dispatch(removeUser(null))
   }
-
-  const handleSignUp = () => setShowLoginForm(true)
 
   const removeLike = async (id) => {
     const quiz = quizzes.find((n) => n.id === id)
@@ -138,19 +134,35 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <>
         <GlobalStyles />
-        {user && <Navigation user={user} handleLogout={handleLogout} />}
+        <Navigation user={user} handleLogout={handleLogout} />
         <Notification />
         <Container>
-          {!user ? (
-            <>
-              {!showLoginForm && (
-                <>
-                  <SignUpForm handleSignUp={handleSignUp} />
-                  <Button onClick={() => setShowLoginForm(true)}>Login</Button>
-                </>
-              )}
-              {showLoginForm && (
-                <>
+          <>
+            <Routes>
+              <Route path='/' element={<QuizHome />}/>
+              <Route
+                path='/mypage'
+                element={
+                  user ? (
+                    <UserPage removeLike={removeLike} />
+                  ) : (
+                    <Navigate to='/login' replace />
+                  )
+                }
+              />
+              <Route path='/users' element={<Users />}/>
+              <Route path='/users/:userId' element={<User />}/>
+              <Route path='/quizzes/:quizId' element={
+                <QuizView
+                  deleteQuiz={deleteQuiz}
+                  addQuestion={addQuestion}
+                  updateQuestion={updateQuestion}
+                  removeQuestion={removeQuestion}
+                />
+              }/>
+              <Route
+                path="/login"
+                element={user ? <Navigate to="/" replace /> :
                   <LoginForm
                     username={username}
                     password={password}
@@ -158,30 +170,16 @@ const App = () => {
                     handlePasswordChange={({ target }) => setPassword(target.value)}
                     handleSubmit={handleLogin}
                   />
-                  <Button onClick={() => setShowLoginForm(false)}>Sign up</Button>
-                </>
-              )}
-            </>
-          ) : (
-            <>
-              <Routes>
-                <Route path='/' element={<QuizHome />}/>
-                <Route path='/mypage/' element={<UserPage removeLike={removeLike}/>}/>
-                <Route path='/users' element={<Users />}/>
-                <Route path='/users/:userId' element={<User />}/>
-                <Route path='/quizzes/:quizId' element={
-                  <QuizView
-                    deleteQuiz={deleteQuiz}
-                    addQuestion={addQuestion}
-                    updateQuestion={updateQuestion}
-                    removeQuestion={removeQuestion}
-                  />
-                }/>
-                <Route path="*" element={<Navigate to="/404" />} />
-                <Route path="/404" element={<NotFound />} />
-              </Routes>
-            </>
-          )}
+                }
+              />
+              <Route
+                path="/signup"
+                element={user ? <Navigate to="/" replace /> : <SignUpForm />}
+              />
+              <Route path="*" element={<Navigate to="/404" replace />} />
+              <Route path="/404" element={<NotFound />} />
+            </Routes>
+          </>
         </Container>
       </>
     </ThemeProvider>

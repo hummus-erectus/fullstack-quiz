@@ -1,10 +1,12 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { StyledNavigation } from './styles/Navigation.styled'
 import { Container } from './styles/Container.styled'
 import { Flex } from './styles/Flex.styled'
 import { Button } from './styles/Button.styled'
 
 const Navigation = ({ user, handleLogout }) => {
+
+  const navigate = useNavigate()
 
   return (
     <StyledNavigation>
@@ -16,10 +18,17 @@ const Navigation = ({ user, handleLogout }) => {
           </Flex>
           <Link to="/" className='logo'>Quiz App</Link>
           <Flex>
-            <p><Link to="/mypage"><span>{user.username}</span></Link> logged in</p>
-            <Button onClick={handleLogout} className="logoutButton">
-              logout
-            </Button>
+            {user && <p><Link to="/mypage"><span>{user.username}</span></Link> logged in</p>}
+            {user ? (
+              <Button onClick={handleLogout} className="logoutButton">
+                Logout
+              </Button>
+            ) : (
+              <Button onClick={() => navigate('login')} className="loginButton">
+                Login
+              </Button>
+            )
+            }
           </Flex>
         </nav>
       </Container>

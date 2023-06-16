@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import { useNavigate } from 'react-router-dom'
 import { Button } from './styles/Button.styled'
 import { Form } from './styles/Form.styled'
 
@@ -8,34 +9,40 @@ const LoginForm = ({
   handlePasswordChange,
   username,
   password,
-}) => (
-  <Form>
-    <h2>Login to application</h2>
-    <form onSubmit={handleSubmit}>
-      <div className='input'>
+}) => {
+
+  const navigate = useNavigate()
+
+  return (
+    <Form>
+      <h2>Login to application</h2>
+      <form onSubmit={handleSubmit}>
+        <div className='input'>
         username
-        <input
-          id="username"
-          type="text"
-          value={username}
-          name="Username"
-          onChange={handleUsernameChange}
-        />
-      </div>
-      <div className='input'>
+          <input
+            id="username"
+            type="text"
+            value={username}
+            name="Username"
+            onChange={handleUsernameChange}
+          />
+        </div>
+        <div className='input'>
         password
-        <input
-          id="password"
-          type="password"
-          value={password}
-          name="Password"
-          onChange={handlePasswordChange}
-        />
-      </div>
-      <Button type="submit">login</Button>
-    </form>
-  </Form>
-)
+          <input
+            id="password"
+            type="password"
+            value={password}
+            name="Password"
+            onChange={handlePasswordChange}
+          />
+        </div>
+        <Button type="submit">Login</Button>
+      </form>
+      <Button onClick={() => navigate('/signup')}>Sign up</Button>
+    </Form>
+  )
+}
 
 LoginForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

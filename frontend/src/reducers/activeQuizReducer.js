@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import quizService from '../services/quizzes'
+import questionService from '../services/questions'
 
 const activeQuizSlice = createSlice({
   name: 'quiz',
@@ -11,10 +12,36 @@ const activeQuizSlice = createSlice({
     update(state, action) {
       return { ...state, ...action.payload }
     },
+    addQuestion(state, action) {
+      const question = action.payload[0]
+      state.questions.push(question)
+    },
+    updateQuestion(state, action) {
+      const { questionId, updatedQuestion } = action.payload
+      return {
+        ...state,
+        questions: state.questions.map(question =>
+          question._id === questionId ? { ...question, ...updatedQuestion } : question
+        )
+      }
+    },
+    removeQuestion(state, action) {
+      const questionId = action.payload
+      return {
+        ...state,
+        questions: state.questions.filter(question => question._id !== questionId)
+      }
+    },
   },
 })
 
-export const { setQuiz, update } = activeQuizSlice.actions
+export const {
+  setQuiz,
+  update,
+  addQuestion,
+  updateQuestion,
+  removeQuestion
+} = activeQuizSlice.actions
 
 export const initializeQuiz = (id) => {
   return async (dispatch) => {
@@ -70,5 +97,27 @@ export const updateQuiz = (id, changedQuiz) => {
     }
   }
 }
+
+export const createQuestion = (quizId, questionObject) => {
+  return async (dispatch) => {
+    const createdQuestion = await questionService.create(quizId, questionObject)
+    dispatch(addQuestion(createdQuestion))
+  }
+}
+
+export const updateQuestionAction = (id, updatedContent) => {
+  return async (dispatch) => {
+    const updatedQuestion = await questionService.update(id, updatedContent)
+    dispatch(updateQuestion(updatedQuestion))
+  }
+}
+
+export const removeQuestionAction = (id, quizId) => {
+  return async (dispatch) => {
+    await questionService.removeFromOne(id, quizId)
+    dispatch(removeQuestion(id))
+  }
+}
+
 
 export default activeQuizSlice.reducer

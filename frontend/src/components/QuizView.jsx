@@ -105,6 +105,12 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
 
   }
 
+  const handleDeleteQuestion = async (question, quiz) => {
+    if (window.confirm('Do you really want to delete this question?')) {
+      await removeQuestion(question, quiz)
+    }
+  }
+
   const addComment = async (event) => {
     event.preventDefault()
     await dispatch(newComment(quiz.id, comment))
@@ -192,7 +198,7 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
                     </Togglable>
                   )}
                   {quiz.user.username === user.username &&
-                    <Button onClick={() => removeQuestion(question._id, quiz.id)}>Remove Question</Button>
+                    <Button onClick={() => handleDeleteQuestion(question._id, quiz.id)}>Remove Question</Button>
                   }
                 </QuestionTogglable>
               ))

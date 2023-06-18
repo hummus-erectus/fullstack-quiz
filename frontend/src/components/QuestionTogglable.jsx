@@ -1,39 +1,24 @@
-import { useState, forwardRef, useImperativeHandle } from 'react'
+// import { useState, forwardRef, useImperativeHandle } from 'react'
 import { StyledQuestionTogglable } from './styles/QuestionTogglable.styled'
 
-const QuestionTogglable = forwardRef((props, refs) => {
-  const [visible, setVisible] = useState(false)
-
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
-
-  const toggleVisibility = () => {
-    setVisible(!visible)
-  }
-
-  const isVisible = () => {
-    return visible
-  }
-
-  useImperativeHandle(refs, () => {
-    return {
-      toggleVisibility,
-      isVisible
-    }
-  })
+const QuestionTogglable = ({ label, isOpen, toggleVisibility, children }) => {
+  const hideWhenVisible = { display: isOpen ? 'none' : '' }
+  const showWhenVisible = { display: isOpen ? '' : 'none' }
 
   return (
     <StyledQuestionTogglable>
       <div style={hideWhenVisible}>
-        <p className="label" onClick={toggleVisibility}>{props.label}</p>
+        <p className="label" onClick={toggleVisibility}>
+          {label}
+        </p>
       </div>
       <div style={showWhenVisible}>
-        <p onClick={toggleVisibility}>{props.label}</p>
-        {props.children}
+        <p onClick={toggleVisibility}>{label}</p>
+        {children}
       </div>
     </StyledQuestionTogglable>
   )
-})
+}
 
 QuestionTogglable.displayName = 'QuestionTogglable'
 

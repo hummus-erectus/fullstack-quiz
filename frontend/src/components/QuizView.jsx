@@ -15,6 +15,8 @@ import EditQuestionForm from './EditQuestionForm'
 
 const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) => {
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true)
+  const [openedQuestionId, setOpenedQuestionId] = useState(null) // Track the currently opened question
+
   const user = useSelector(({ user }) => user)
   const navigate = useNavigate()
   const questionFormRef = useRef()
@@ -86,6 +88,14 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
       dispatch(setNotification(`You unliked "${quiz.title}"`, 'success', 5))
     } catch (error) {
       dispatch(setNotification(`${quiz.title} was already removed from the server`, 'error', 5))
+    }
+  }
+
+  const toggleQuestionVisibility = (questionId) => {
+    if (questionId === openedQuestionId) {
+      setOpenedQuestionId(null) // Close the currently open question
+    } else {
+      setOpenedQuestionId(questionId) // Open the clicked question
     }
   }
 
@@ -180,7 +190,12 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
           <Togglable buttonLabel="See questions">
             {
               quiz.questions.map((question) => (
-                <QuestionTogglable key={question._id} label={question.content}>
+                <QuestionTogglable
+                  key={question._id}
+                  label={question.content}
+                  isOpen={question._id === openedQuestionId} // Pass a prop to determine if the question is open
+                  toggleVisibility={() => toggleQuestionVisibility(question._id)} // Pass the toggle function
+                >
                   <ul className="options">
                     {shuffleArray(question.options).map((option) => (
                       <li className="option" key={`${question._id}-${option.optionId}`}>

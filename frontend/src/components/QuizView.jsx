@@ -12,10 +12,14 @@ import EditableField from './EditableField'
 import { updateQuiz, newComment, newLike, unLike, initializeQuiz } from '../reducers/activeQuizReducer'
 import QuestionTogglable from './QuestionTogglable'
 import EditQuestionForm from './EditQuestionForm'
+import { FiEdit2 } from 'react-icons/fi'
+import { MdRemoveCircleOutline } from 'react-icons/md'
 
 const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) => {
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true)
-  const [openedQuestionId, setOpenedQuestionId] = useState(null) // Track the currently opened question
+  const [openedQuestionId, setOpenedQuestionId] = useState(null)
+  const [isQuestionFormVisible, setQuestionFormVisible] = useState(false)
+
 
   const user = useSelector(({ user }) => user)
   const navigate = useNavigate()
@@ -115,6 +119,10 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
 
   }
 
+  const toggleQuestionFormVisibility = () => {
+    setQuestionFormVisible(!isQuestionFormVisible)
+  }
+
   const handleDeleteQuestion = async (question, quiz) => {
     if (window.confirm('Do you really want to delete this question?')) {
       await removeQuestion(question, quiz)
@@ -187,7 +195,7 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
       {quiz.questions.length > 0 && (
         <>
           <Button onClick={handleStartQuiz}>Start quiz</Button>
-          <Togglable buttonLabel="See questions">
+          <Togglable buttonLabel="See questions" closeButtonLabel="Hide Questions">
             {
               quiz.questions.map((question) => (
                 <QuestionTogglable
@@ -204,16 +212,16 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
                     ))}
                   </ul>
                   {user && quiz.user.username === user.username && (
-                    <Togglable buttonLabel="Edit question" ref={(ref) => (editQuestionFormRefs.current[question._id] = ref)}>
+                    <Togglable buttonIcon={FiEdit2} buttonLabel="Edit question" onToggle={toggleQuestionFormVisibility} ref={(ref) => (editQuestionFormRefs.current[question._id] = ref)}>
                       <EditQuestionForm
                         question={question}
                         updateQuestion={updateQuestion}
-                        onSave={() => handleEditQuestionSave(question._id)} // Pass the onSave callback
+                        onSave={() => handleEditQuestionSave(question._id)}
                       />
                     </Togglable>
                   )}
-                  {user && quiz.user.username === user.username &&
-                    <Button onClick={() => handleDeleteQuestion(question._id, quiz.id)}>Remove Question</Button>
+                  {user && quiz.user.username === user.username && !isQuestionFormVisible &&
+                    <span onClick={() => handleDeleteQuestion(question._id, quiz.id)}><MdRemoveCircleOutline /></span>
                   }
                 </QuestionTogglable>
               ))

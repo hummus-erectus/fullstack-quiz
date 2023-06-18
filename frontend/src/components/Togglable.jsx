@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Button } from './styles/Button.styled'
 import { ButtonAlt } from './styles/ButtonAlt.styled'
 
-const Togglable = forwardRef((props, refs) => {
+const Togglable = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false)
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
@@ -11,34 +11,45 @@ const Togglable = forwardRef((props, refs) => {
 
   const toggleVisibility = () => {
     setVisible(!visible)
+    if (props.onToggle) {
+      props.onToggle(!visible)
+    }
   }
 
   const isVisible = () => {
     return visible
   }
 
-  useImperativeHandle(refs, () => {
+  useImperativeHandle(ref, () => {
     return {
       toggleVisibility,
-      isVisible
+      isVisible,
     }
   })
 
+  const renderButton = () => {
+    if (props.buttonIcon) {
+      return <span onClick={toggleVisibility}><props.buttonIcon /></span>
+    }
+    return <Button onClick={toggleVisibility}>{props.buttonLabel}</Button>
+  }
+
   return (
-    <div>
-      <div style={hideWhenVisible}>
-        <Button onClick={toggleVisibility}>{props.buttonLabel}</Button>
+    <>
+      <div className="openButtonContainer" style={hideWhenVisible}>
+        {renderButton()}
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <ButtonAlt onClick={toggleVisibility}>cancel</ButtonAlt>
+        <ButtonAlt onClick={toggleVisibility}>{props.closeButtonLabel || 'Cancel'}</ButtonAlt>
       </div>
-    </div>
+    </>
   )
 })
 
 Togglable.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
+  buttonIcon: PropTypes.elementType,
 }
 
 Togglable.displayName = 'Togglable'

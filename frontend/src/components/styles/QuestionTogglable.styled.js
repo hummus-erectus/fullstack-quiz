@@ -13,7 +13,7 @@ export const StyledQuestionTogglable = styled.div`
 
 .options {
   width: 100%;
-  display: flex;
+  display: inline-flex;
   gap: 2em;
   justify-content: space-between;
   color: red;

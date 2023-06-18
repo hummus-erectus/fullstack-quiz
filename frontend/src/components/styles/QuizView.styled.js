@@ -55,4 +55,8 @@ export const StyledQuizView = styled.div`
         align-self: flex-start;
     }
 
+    .openButtonContainer {
+        display: inline;
+    }
+
 `

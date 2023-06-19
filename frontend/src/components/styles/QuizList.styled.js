@@ -43,8 +43,4 @@ export const StyledQuizList = styled.div`
         font-weight: 500;
         cursor: pointer;
     }
-
-    .visibleContents{
-        gap:0;
-    }
 `

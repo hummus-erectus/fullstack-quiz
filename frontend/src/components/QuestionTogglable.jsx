@@ -1,4 +1,3 @@
-// import { useState, forwardRef, useImperativeHandle } from 'react'
 import { StyledQuestionTogglable } from './styles/QuestionTogglable.styled'
 
 const QuestionTogglable = ({ label, isOpen, toggleVisibility, children }) => {
@@ -12,8 +11,8 @@ const QuestionTogglable = ({ label, isOpen, toggleVisibility, children }) => {
           {label}
         </p>
       </div>
-      <div className="visibleContents" style={showWhenVisible}>
-        <p className="question" onClick={toggleVisibility}>{label}</p>
+      <div style={showWhenVisible}>
+        <p onClick={toggleVisibility}>{label}</p>
         {children}
       </div>
     </StyledQuestionTogglable>

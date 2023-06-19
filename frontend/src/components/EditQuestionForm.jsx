@@ -48,12 +48,9 @@ const EditQuestionForm = ({ question, updateQuestion, onSave }) => {
   const submitQuiz = (event) => {
     event.preventDefault()
 
-    // Remove empty incorrect answers
     const filteredIncorrectAnswers = incorrectAnswers.filter((answer) => answer.content.trim() !== '')
 
-    // Check if there are at least two options (one correct answer and one incorrect answer)
     if (correctAnswer.trim() === '' || filteredIncorrectAnswers.length < 1) {
-      // Display an error message or handle it accordingly
       console.log('missing answers')
       return
     }

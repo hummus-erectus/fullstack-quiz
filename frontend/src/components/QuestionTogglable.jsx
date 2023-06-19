@@ -12,8 +12,8 @@ const QuestionTogglable = ({ label, isOpen, toggleVisibility, children }) => {
           {label}
         </p>
       </div>
-      <div style={showWhenVisible}>
-        <p onClick={toggleVisibility}>{label}</p>
+      <div className="visibleContents" style={showWhenVisible}>
+        <p className="question" onClick={toggleVisibility}>{label}</p>
         {children}
       </div>
     </StyledQuestionTogglable>

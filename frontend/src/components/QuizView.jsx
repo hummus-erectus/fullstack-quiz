@@ -204,25 +204,27 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
                   isOpen={question._id === openedQuestionId} // Pass a prop to determine if the question is open
                   toggleVisibility={() => toggleQuestionVisibility(question._id)} // Pass the toggle function
                 >
-                  <ul className="options">
-                    {shuffleArray(question.options).map((option) => (
-                      <li className="option" key={`${question._id}-${option.optionId}`}>
-                        {option.content}
-                      </li>
-                    ))}
-                  </ul>
-                  {user && quiz.user.username === user.username && (
-                    <Togglable buttonIcon={FiEdit2} buttonLabel="Edit question" onToggle={toggleQuestionFormVisibility} ref={(ref) => (editQuestionFormRefs.current[question._id] = ref)}>
-                      <EditQuestionForm
-                        question={question}
-                        updateQuestion={updateQuestion}
-                        onSave={() => handleEditQuestionSave(question._id)}
-                      />
-                    </Togglable>
-                  )}
-                  {user && quiz.user.username === user.username && !isQuestionFormVisible &&
-                    <span onClick={() => handleDeleteQuestion(question._id, quiz.id)}><MdRemoveCircleOutline /></span>
-                  }
+                  <div className='childContents'>
+                    {isQuestionFormVisible && <ul className="options">
+                      {shuffleArray(question.options).map((option) => (
+                        <li className="option" key={`${question._id}-${option.optionId}`}>
+                          {option.content}
+                        </li>
+                      ))}
+                    </ul>}
+                    {user && quiz.user.username === user.username && (
+                      <Togglable buttonIcon={FiEdit2} buttonLabel="Edit question" onToggle={toggleQuestionFormVisibility} ref={(ref) => (editQuestionFormRefs.current[question._id] = ref)}>
+                        <EditQuestionForm
+                          question={question}
+                          updateQuestion={updateQuestion}
+                          onSave={() => handleEditQuestionSave(question._id)}
+                        />
+                      </Togglable>
+                    )}
+                    {user && quiz.user.username === user.username && isQuestionFormVisible &&
+                      <span onClick={() => handleDeleteQuestion(question._id, quiz.id)}><MdRemoveCircleOutline className='removeIcon'/></span>
+                    }
+                  </div>
                 </QuestionTogglable>
               ))
             }

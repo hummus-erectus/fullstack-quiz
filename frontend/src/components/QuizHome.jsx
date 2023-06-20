@@ -10,6 +10,7 @@ const QuizHome = () => {
   const quizFormRef = useRef()
   const dispatch = useDispatch()
   const quizzes = useSelector(({ quiz }) => quiz)
+  const user = useSelector(({ user }) => user)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -44,9 +45,9 @@ const QuizHome = () => {
   return (
     <>
       <QuizList quizzes={quizzes} />
-      <Togglable buttonLabel="new quiz" ref={quizFormRef}>
+      {user && <Togglable buttonLabel="new quiz" ref={quizFormRef}>
         <QuizForm createQuiz={addQuiz} />
-      </Togglable>
+      </Togglable>}
     </>
   )
 }

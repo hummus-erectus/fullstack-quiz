@@ -58,5 +58,9 @@ export const StyledQuizView = styled.div`
     .openButtonContainer {
         display: inline;
     }
+    .clickableIcon {
+        cursor: pointer;
+        font-size: 1.2em;
+    }
 
 `

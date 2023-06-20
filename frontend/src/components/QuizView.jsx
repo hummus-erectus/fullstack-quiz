@@ -97,9 +97,9 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
 
   const toggleQuestionVisibility = (questionId) => {
     if (questionId === openedQuestionId) {
-      setOpenedQuestionId(null) // Close the currently open question
+      setOpenedQuestionId(null)
     } else {
-      setOpenedQuestionId(questionId) // Open the clicked question
+      setOpenedQuestionId(questionId)
     }
   }
 
@@ -201,16 +201,16 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
                 <QuestionTogglable
                   key={question._id}
                   label={question.content}
-                  isOpen={question._id === openedQuestionId} // Pass a prop to determine if the question is open
-                  toggleVisibility={() => toggleQuestionVisibility(question._id)} // Pass the toggle function
+                  isOpen={question._id === openedQuestionId}
+                  toggleVisibility={() => toggleQuestionVisibility(question._id)}
                 >
-                  <ul className="options">
+                  {!isQuestionFormVisible && <ul className="options">
                     {shuffleArray(question.options).map((option) => (
                       <li className="option" key={`${question._id}-${option.optionId}`}>
                         {option.content}
                       </li>
                     ))}
-                  </ul>
+                  </ul>}
                   {user && quiz.user.username === user.username && (
                     <Togglable buttonIcon={FiEdit2} buttonLabel="Edit question" onToggle={toggleQuestionFormVisibility} ref={(ref) => (editQuestionFormRefs.current[question._id] = ref)}>
                       <EditQuestionForm
@@ -221,7 +221,7 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
                     </Togglable>
                   )}
                   {user && quiz.user.username === user.username && !isQuestionFormVisible &&
-                    <span onClick={() => handleDeleteQuestion(question._id, quiz.id)}><MdRemoveCircleOutline /></span>
+                    <span className="clickableIcon" onClick={() => handleDeleteQuestion(question._id, quiz.id)}><MdRemoveCircleOutline /></span>
                   }
                 </QuestionTogglable>
               ))

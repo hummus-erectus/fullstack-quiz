@@ -29,7 +29,7 @@ const Togglable = forwardRef((props, ref) => {
 
   const renderButton = () => {
     if (props.buttonIcon) {
-      return <span onClick={toggleVisibility}><props.buttonIcon className="buttonIcon"/></span>
+      return <span onClick={toggleVisibility}><props.buttonIcon className="clickableIcon"/></span>
     }
     return <Button onClick={toggleVisibility}>{props.buttonLabel}</Button>
   }

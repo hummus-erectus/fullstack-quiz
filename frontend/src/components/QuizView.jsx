@@ -11,15 +11,10 @@ import PlayQuiz from './PlayQuiz'
 import EditableField from './EditableField'
 import { updateQuiz, newComment, newLike, unLike, initializeQuiz } from '../reducers/activeQuizReducer'
 import QuestionTogglable from './QuestionTogglable'
-import EditQuestionForm from './EditQuestionForm'
-import { FiEdit2 } from 'react-icons/fi'
-import { MdRemoveCircleOutline } from 'react-icons/md'
 
 const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) => {
   const [isLoadingQuestions, setIsLoadingQuestions] = useState(true)
   const [openedQuestionId, setOpenedQuestionId] = useState(null)
-  const [isQuestionFormVisible, setQuestionFormVisible] = useState(false)
-
 
   const user = useSelector(({ user }) => user)
   const navigate = useNavigate()
@@ -119,10 +114,6 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
 
   }
 
-  const toggleQuestionFormVisibility = () => {
-    setQuestionFormVisible(!isQuestionFormVisible)
-  }
-
   const handleDeleteQuestion = async (question, quiz) => {
     if (window.confirm('Do you really want to delete this question?')) {
       await removeQuestion(question, quiz)
@@ -133,15 +124,6 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
     event.preventDefault()
     await dispatch(newComment(quiz.id, comment))
     setComment('')
-  }
-
-  const shuffleArray = (array) => {
-    const newArray = [...array]
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]]
-    }
-    return newArray
   }
 
   if (!quiz) {
@@ -199,31 +181,16 @@ const QuizView = ({ deleteQuiz, addQuestion, removeQuestion, updateQuestion }) =
             {
               quiz.questions.map((question) => (
                 <QuestionTogglable
+                  question={question}
                   key={question._id}
                   label={question.content}
                   isOpen={question._id === openedQuestionId}
                   toggleVisibility={() => toggleQuestionVisibility(question._id)}
-                >
-                  {!isQuestionFormVisible && <ul className="options">
-                    {shuffleArray(question.options).map((option) => (
-                      <li className="option" key={`${question._id}-${option.optionId}`}>
-                        {option.content}
-                      </li>
-                    ))}
-                  </ul>}
-                  {user && quiz.user.username === user.username && (
-                    <Togglable buttonIcon={FiEdit2} buttonLabel="Edit question" onToggle={toggleQuestionFormVisibility} ref={(ref) => (editQuestionFormRefs.current[question._id] = ref)}>
-                      <EditQuestionForm
-                        question={question}
-                        updateQuestion={updateQuestion}
-                        onSave={() => handleEditQuestionSave(question._id)}
-                      />
-                    </Togglable>
-                  )}
-                  {user && quiz.user.username === user.username && !isQuestionFormVisible &&
-                    <span className="clickableIcon" onClick={() => handleDeleteQuestion(question._id, quiz.id)}><MdRemoveCircleOutline /></span>
-                  }
-                </QuestionTogglable>
+                  updateQuestion={updateQuestion}
+                  handleDeleteQuestion={handleDeleteQuestion}
+                  handleEditQuestionSave={handleEditQuestionSave}
+                  editQuestionFormRefs={editQuestionFormRefs}
+                />
               ))
             }
           </Togglable>

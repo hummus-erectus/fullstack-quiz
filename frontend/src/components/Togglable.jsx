@@ -1,4 +1,4 @@
-import { useState, forwardRef, useImperativeHandle } from 'react'
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
 import { Button } from './styles/Button.styled'
 import { ButtonAlt } from './styles/ButtonAlt.styled'
@@ -8,6 +8,13 @@ const Togglable = forwardRef((props, ref) => {
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }
+
+  useEffect(() => {
+    if(props.isOpen === false) {
+      setVisible(false)
+      props.setQuestionFormVisible(false)
+    }
+  }, [props.isOpen])
 
   const toggleVisibility = () => {
     setVisible(!visible)

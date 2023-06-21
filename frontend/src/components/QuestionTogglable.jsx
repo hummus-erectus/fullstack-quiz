@@ -49,6 +49,8 @@ const QuestionTogglable = ({ question, label, isOpen, toggleVisibility, updateQu
             buttonIcon={FiEdit2}
             buttonLabel="Edit question"
             onToggle={toggleQuestionFormVisibility}
+            isOpen={isOpen}
+            setQuestionFormVisible={setQuestionFormVisible}
             ref={(ref) => (editQuestionFormRefs.current[question._id] = ref)}
           >
             <EditQuestionForm
@@ -59,7 +61,7 @@ const QuestionTogglable = ({ question, label, isOpen, toggleVisibility, updateQu
           </Togglable>
         )}
         {user && quiz.user.username === user.username && !isQuestionFormVisible &&
-                    <span className="clickableIcon" onClick={() => handleDeleteQuestion(question._id, quiz.id)}><MdRemoveCircleOutline /></span>
+          <span className="clickableIcon" onClick={() => handleDeleteQuestion(question._id, quiz.id)}><MdRemoveCircleOutline /></span>
         }
       </div>
     </StyledQuestionTogglable>

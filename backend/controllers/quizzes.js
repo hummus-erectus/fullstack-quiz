@@ -129,18 +129,15 @@ quizzesRouter.delete('/:id', async (request, response) => {
       return response.status(401).json({ error: 'Operation not permitted' });
     }
 
-    // Remove the quiz from the user who created it
     await User.findOneAndUpdate(
       { _id: user.id },
       { $pull: { quizzes: quiz.id } }
     );
 
-    // Find all users who have liked the quiz
     const users = await User.find({ likedQuizzes: quizId });
 
     console.log('Users who liked the quiz:', users);
 
-    // Remove the quiz from the likedQuizzes array of all users who have liked it
     const updatePromises = users.map(async (likedUser) => {
       await User.findOneAndUpdate(
         { _id: likedUser.id },

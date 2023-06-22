@@ -101,8 +101,6 @@ const App = () => {
 
   }
 
-  // Question dispatch functions
-
   const addQuestion = async (quizId, questionObject) => {
     try {
       await dispatch(createQuestion(quizId, questionObject))
@@ -114,7 +112,7 @@ const App = () => {
 
   const updateQuestion = async (questionId, updatedQuestion) => {
     try {
-      await dispatch(updateQuestionAction(questionId, updatedQuestion)) // Dispatch updateQuestionAction with questionId and updatedQuestion
+      await dispatch(updateQuestionAction(questionId, updatedQuestion))
       dispatch(setNotification('Question updated', 'success', 5))
     } catch (error) {
       dispatch(setNotification(error.message, 'error', 5))

@@ -33,13 +33,13 @@ questionsRouter.post('/:quizId', async (request, response) => {
       content: content,
       options: options,
       correctAnswer: correctAnswer,
-      quizzes: [quiz._id], // Associate the question with the current quiz
-      user: decodedToken.id // Set the user field to the ID of the logged-in user
+      quizzes: [quiz._id],
+      user: decodedToken.id
     });
 
     const savedQuestion = await question.save();
 
-    quiz.questions.push(savedQuestion._id); // Add the question reference to the quiz's questions array
+    quiz.questions.push(savedQuestion._id);
 
     newQuestions.push(savedQuestion);
   }
@@ -94,17 +94,14 @@ questionsRouter.put('/question/:questionId', async (request, response) => {
       return response.status(404).json({ error: 'Question not found' });
     }
 
-    // Ensure that the authenticated user is authorized to edit the question
     if (question.user.toString() !== decodedToken.id) {
       return response.status(403).json({ error: 'Not authorized to edit this question' });
     }
 
-    // Update the question content, options, and correct answer based on the request body
     question.content = request.body.content;
     question.options = request.body.options;
     question.correctAnswer = request.body.correctAnswer;
 
-    // Save the updated question
     const updatedQuestion = await question.save();
 
     response.json(updatedQuestion);
@@ -130,12 +127,10 @@ questionsRouter.delete('/question/:questionId', async (request, response) => {
       return response.status(404).json({ error: 'Question not found' });
     }
 
-    // Ensure that the authenticated user is authorized to delete the question
     if (question.user.toString() !== decodedToken.id) {
       return response.status(403).json({ error: 'Not authorized to delete this question' });
     }
 
-    // Remove the question from all quizzes it is associated with
     await Quiz.updateMany({ questions: questionId }, { $pull: { questions: questionId } });
 
     await question.remove();
@@ -170,7 +165,7 @@ questionsRouter.delete('/:quizId/:questionId', async (request, response) => {
     return response.status(404).json({ error: 'Question not found in this quiz' });
   }
 
-  quiz.questions.splice(questionIndex, 1); // Remove the question reference from the quiz's questions array
+  quiz.questions.splice(questionIndex, 1);
   await quiz.save();
 
   const question = await Question.findById(questionId);
@@ -183,7 +178,7 @@ questionsRouter.delete('/:quizId/:questionId', async (request, response) => {
     return response.status(404).json({ error: 'Quiz not found in question' });
   }
 
-  question.quizzes.splice(quizIndex, 1); // Remove the quiz reference from the question's quizzes array
+  question.quizzes.splice(quizIndex, 1);
   await question.save();
 
   response.status(204).end();

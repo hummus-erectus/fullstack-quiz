@@ -38,13 +38,10 @@ const QuestionForm = ({ addQuestion, quizId }) => {
   const submitQuiz = (event) => {
     event.preventDefault()
 
-    // Remove empty incorrect answers
     const filteredIncorrectAnswers = incorrectAnswers.filter((answer) => answer.content.trim() !== '')
 
-    // Check if there are at least two options (one correct answer and one incorrect answer)
     if (correctAnswer.trim() === '' || filteredIncorrectAnswers.length < 1) {
-      // Display an error message or handle it accordingly
-      dispatch(setNotification('You must include a correct answer and at least one incorrecr answer', 'error', 5))
+      dispatch(setNotification('You must include a correct answer and at least one incorrect answer', 'error', 5))
       return
     }
 

@@ -62,7 +62,7 @@ const PlayQuiz = ({ questions }) => {
       command: 'hey',
       callback: () => {
         if (!showFeedback && currentQuestion) {
-          const optionLettersArray = optionLetters.split('') // Convert optionLetters to an array
+          const optionLettersArray = optionLetters.split('')
           const optionIndex = optionLettersArray.findIndex((letter) => letter.toLowerCase() === 'a')
           if (optionIndex !== -1) {
             const optionId = shuffledOptions[optionIndex].optionId
@@ -77,7 +77,7 @@ const PlayQuiz = ({ questions }) => {
       command: 'be',
       callback: () => {
         if (!showFeedback && currentQuestion) {
-          const optionLettersArray = optionLetters.split('') // Convert optionLetters to an array
+          const optionLettersArray = optionLetters.split('')
           const optionIndex = optionLettersArray.findIndex((letter) => letter.toLowerCase() === 'b')
           if (optionIndex !== -1) {
             const optionId = shuffledOptions[optionIndex].optionId
@@ -92,7 +92,7 @@ const PlayQuiz = ({ questions }) => {
       command: 'see',
       callback: () => {
         if (!showFeedback && currentQuestion) {
-          const optionLettersArray = optionLetters.split('') // Convert optionLetters to an array
+          const optionLettersArray = optionLetters.split('')
           const optionIndex = optionLettersArray.findIndex((letter) => letter.toLowerCase() === 'c')
           if (optionIndex !== -1) {
             const optionId = shuffledOptions[optionIndex].optionId
@@ -180,7 +180,7 @@ const PlayQuiz = ({ questions }) => {
   const handleNextQuestion = () => {
     setShowFeedback(false)
     if (isLastQuestion) {
-      setCurrentQuestionIndex(-1) // Set to -1 to indicate showing result screen
+      setCurrentQuestionIndex(-1)
     } else {
       setCurrentQuestionIndex((prevIndex) => prevIndex + 1)
       shuffleOptions()

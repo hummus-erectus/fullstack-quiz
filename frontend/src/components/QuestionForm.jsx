@@ -1,12 +1,16 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Button } from './styles/Button.styled'
 import { MdRemoveCircleOutline, MdAddCircleOutline } from 'react-icons/md'
 import { StyledQuestionForm } from './styles/QuestionForm.styled'
+import { setNotification } from '../reducers/notificationReducer'
 
 const QuestionForm = ({ addQuestion, quizId }) => {
   const [question, setQuestion] = useState('')
   const [correctAnswer, setCorrectAnswer] = useState('')
   const [incorrectAnswers, setIncorrectAnswers] = useState([{ optionId: 2, content: '' }])
+
+  const dispatch = useDispatch()
 
   const handleCorrectAnswerChange = (value) => {
     setCorrectAnswer(value)
@@ -40,7 +44,7 @@ const QuestionForm = ({ addQuestion, quizId }) => {
     // Check if there are at least two options (one correct answer and one incorrect answer)
     if (correctAnswer.trim() === '' || filteredIncorrectAnswers.length < 1) {
       // Display an error message or handle it accordingly
-      console.log('missing answers')
+      dispatch(setNotification('You must include a correct answer and at least one incorrecr answer', 'error', 5))
       return
     }
 

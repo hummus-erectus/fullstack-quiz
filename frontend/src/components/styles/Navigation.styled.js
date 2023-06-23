@@ -5,8 +5,8 @@ export const StyledNavigation = styled.div`
 
   nav {
     height: 60px;
-    align-items: center;
-    position: relative;
+    /* align-items: center; */
+    /* position: relative; */
   }
 
   .nav-container {
@@ -23,14 +23,25 @@ export const StyledNavigation = styled.div`
     display: none;
   }
 
+  .nav-elements {
+    display: flex;
+  }
+
   .nav-elements ul {
     display: flex;
     justify-content: space-between;
     list-style-type: none;
   }
 
-  .nav-elements ul li:not(:last-child) {
-    margin-right: 60px;
+  .nav-elements ul li {
+    display: flex;
+    align-items: center;
+
+    margin-right: 40px;
+  }
+
+  .nav-elements ul li span {
+    display: block;
   }
 
   .nav-elements ul a.active {
@@ -39,7 +50,7 @@ export const StyledNavigation = styled.div`
     position: relative;
   }
 
-  .nav-elements ul a.active::after {
+  /* .nav-elements ul a.active::after {
     content: '';
     position: absolute;
     bottom: -4px;
@@ -47,7 +58,7 @@ export const StyledNavigation = styled.div`
     width: 800%;
     height: 2px;
     background-color: #69b3fd;
-  }
+  } */
 
   span {
     font-weight: 700;
@@ -82,6 +93,7 @@ export const StyledNavigation = styled.div`
     }
 
     .nav-elements {
+      display: block;
       position: absolute;
       z-index: 100;
       right: 0;

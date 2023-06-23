@@ -132,7 +132,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <>
         <GlobalStyles />
-        <Navigation user={user} handleLogout={handleLogout} />
+        <Navigation user={user} />
         <Notification />
         <Container>
           <>
@@ -142,7 +142,7 @@ const App = () => {
                 path='/mypage'
                 element={
                   user ? (
-                    <UserPage removeLike={removeLike} />
+                    <UserPage removeLike={removeLike} handleLogout={handleLogout}/>
                   ) : (
                     <Navigate to='/login' replace />
                   )

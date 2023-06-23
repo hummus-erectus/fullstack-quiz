@@ -5,7 +5,7 @@ import { StyledNavigation } from './styles/Navigation.styled'
 import { Button } from './styles/Button.styled'
 import { FaBars } from 'react-icons/fa'
 
-const Navigation = ({ user, handleLogout }) => {
+const Navigation = ({ user }) => {
   const [showNavbar, setShowNavbar] = useState(false)
   const navigate = useNavigate()
 
@@ -23,29 +23,28 @@ const Navigation = ({ user, handleLogout }) => {
           <div className="menu-icon" onClick={handleShowNavbar}>
             <FaBars />
           </div>
-        </div>
-        <div className={`nav-elements  ${showNavbar && 'active'}`}>
-          <ul>
-            <li><Link to='/' onClick={() => setShowNavbar(false)}>Quizzes</Link></li>
-            <li><Link to='/users' onClick={() => setShowNavbar(false)}>Users</Link></li>
-            <li>{user && <p><Link onClick={() => setShowNavbar(false)} to="/mypage"><span>{user.username}</span></Link> logged in</p>}</li>
-          </ul>
-          {user ? (
-            <Button onClick={() => {
-              handleLogout()
-              setShowNavbar(false)
-            }} className="logoutButton">
-                Logout
-            </Button>
-          ) : (
-            <Button onClick={() => {
-              navigate('login')
-              setShowNavbar(false)
-            }} className="loginButton">
+          <div className={`nav-elements  ${showNavbar && 'active'}`}>
+            <ul>
+              <li><Link to='/' onClick={() => setShowNavbar(false)}>Quizzes</Link></li>
+              <li><Link to='/users' onClick={() => setShowNavbar(false)}>Users</Link></li>
+              <li>{user && <p><Link onClick={() => setShowNavbar(false)} to="/mypage"><span>{user.username}</span></Link> logged in</p>}</li>
+            </ul>
+            {!user && (
+            //   <Button onClick={() => {
+            //     handleLogout()
+            //     setShowNavbar(false)
+            //   }} className="logoutButton">
+            //     Logout
+            //   </Button>
+            // ) : (
+              <Button onClick={() => {
+                navigate('login')
+                setShowNavbar(false)
+              }} className="loginButton">
                 Login
-            </Button>
-          )
-          }
+              </Button>
+            )}
+          </div>
         </div>
       </nav>
     </StyledNavigation>

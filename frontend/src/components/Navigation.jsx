@@ -1,37 +1,53 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { StyledNavigation } from './styles/Navigation.styled'
-import { Container } from './styles/Container.styled'
-import { Flex } from './styles/Flex.styled'
+// import { Container } from './styles/Container.styled'
 import { Button } from './styles/Button.styled'
+import { FaBars } from 'react-icons/fa'
 
 const Navigation = ({ user, handleLogout }) => {
-
+  const [showNavbar, setShowNavbar] = useState(false)
   const navigate = useNavigate()
+
+  const handleShowNavbar = () => {
+    setShowNavbar(!showNavbar)
+  }
 
   return (
     <StyledNavigation>
-      <Container>
-        <nav>
-          <Flex>
-            <Link to="/">Quizzes</Link>
-            <Link to="/users">Users</Link>
-          </Flex>
-          <Link to="/" className='logo'>Quiz App</Link>
-          <Flex>
-            {user && <p><Link to="/mypage"><span>{user.username}</span></Link> logged in</p>}
-            {user ? (
-              <Button onClick={handleLogout} className="logoutButton">
+      <nav>
+        <div className='nav-container'>
+          <div className='logo-container'>
+            <Link to="/" className='logo'>Quiz App</Link>
+          </div>
+          <div className="menu-icon" onClick={handleShowNavbar}>
+            <FaBars />
+          </div>
+        </div>
+        <div className={`nav-elements  ${showNavbar && 'active'}`}>
+          <ul>
+            <li><Link to='/' onClick={() => setShowNavbar(false)}>Quizzes</Link></li>
+            <li><Link to='/users' onClick={() => setShowNavbar(false)}>Users</Link></li>
+            <li>{user && <p><Link onClick={() => setShowNavbar(false)} to="/mypage"><span>{user.username}</span></Link> logged in</p>}</li>
+          </ul>
+          {user ? (
+            <Button onClick={() => {
+              handleLogout()
+              setShowNavbar(false)
+            }} className="logoutButton">
                 Logout
-              </Button>
-            ) : (
-              <Button onClick={() => navigate('login')} className="loginButton">
+            </Button>
+          ) : (
+            <Button onClick={() => {
+              navigate('login')
+              setShowNavbar(false)
+            }} className="loginButton">
                 Login
-              </Button>
-            )
-            }
-          </Flex>
-        </nav>
-      </Container>
+            </Button>
+          )
+          }
+        </div>
+      </nav>
     </StyledNavigation>
   )
 }

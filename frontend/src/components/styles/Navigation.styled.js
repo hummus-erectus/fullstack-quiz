@@ -36,6 +36,9 @@ export const StyledNavigation = styled.div`
   .nav-elements ul li {
     display: flex;
     align-items: center;
+  }
+
+  .nav-elements ul li:not(:last-child) {
     margin-right: 40px;
   }
 

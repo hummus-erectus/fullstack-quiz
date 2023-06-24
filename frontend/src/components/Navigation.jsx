@@ -28,22 +28,16 @@ const Navigation = ({ user }) => {
               <li><Link to='/' onClick={() => setShowNavbar(false)}>Quizzes</Link></li>
               <li><Link to='/users' onClick={() => setShowNavbar(false)}>Users</Link></li>
               {user && <li><Link onClick={() => setShowNavbar(false)} to="/mypage"><span className='username'>{user.username}</span><span className='logged'>logged in</span></Link></li>}
-            </ul>
-            {!user && (
-            //   <Button onClick={() => {
-            //     handleLogout()
-            //     setShowNavbar(false)
-            //   }} className="logoutButton">
-            //     Logout
-            //   </Button>
-            // ) : (
-              <Button onClick={() => {
-                navigate('login')
-                setShowNavbar(false)
-              }} className="loginButton">
+              <li>{!user && (
+                <Button onClick={() => {
+                  navigate('login')
+                  setShowNavbar(false)
+                }} className="loginButton">
                 Login
-              </Button>
-            )}
+                </Button>
+              )}</li>
+            </ul>
+
           </div>
         </div>
       </nav>

@@ -27,7 +27,7 @@ const Navigation = ({ user }) => {
             <ul>
               <li><Link to='/' onClick={() => setShowNavbar(false)}>Quizzes</Link></li>
               <li><Link to='/users' onClick={() => setShowNavbar(false)}>Users</Link></li>
-              <li>{user && <p><Link onClick={() => setShowNavbar(false)} to="/mypage"><span>{user.username}</span></Link> logged in</p>}</li>
+              {user && <li><Link onClick={() => setShowNavbar(false)} to="/mypage"><span className='username'>{user.username}</span><span className='logged'>logged in</span></Link></li>}
             </ul>
             {!user && (
             //   <Button onClick={() => {

@@ -36,12 +36,15 @@ export const StyledNavigation = styled.div`
   .nav-elements ul li {
     display: flex;
     align-items: center;
-
     margin-right: 40px;
   }
 
-  .nav-elements ul li span {
+  .username {
     display: block;
+  }
+
+  .logged {
+    font-weight: 400;
   }
 
   .nav-elements ul a.active {
@@ -59,14 +62,14 @@ export const StyledNavigation = styled.div`
     height: 2px;
     background-color: #69b3fd;
   } */
-
+/*
   span {
     font-weight: 700;
   }
 
   p {
     margin: 0;
-  }
+  } */
 
   a {
     color: ${({ theme }) => theme.colors.primaryContent || '#000'};

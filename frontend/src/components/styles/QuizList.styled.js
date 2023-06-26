@@ -16,7 +16,7 @@ export const StyledQuizList = styled.div`
     }
 
     .quiz:nth-child(odd) {
-        background-color: #EFEAE6;
+        background: ${({ theme }) => theme.colors.baseHighlight || '#EFEAE6'};
     }
 
     .quiz:hover {

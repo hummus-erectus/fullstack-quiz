@@ -29,9 +29,10 @@ const theme = {
     secondary: '#EF9FBC',
     secondaryContent: '#50001D',
     base: '#FAF7F5',
-    baseContent: '291334'
+    baseContent: '#291334',
+    baseHighlight: '#EFEAE6'
   },
-  mobile: '768px',
+  mobile: '600px',
 }
 
 const App = () => {

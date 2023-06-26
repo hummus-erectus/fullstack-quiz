@@ -5,8 +5,6 @@ export const StyledNavigation = styled.div`
 
   nav {
     height: 60px;
-    /* align-items: center; */
-    /* position: relative; */
   }
 
   .nav-container {
@@ -82,16 +80,13 @@ export const StyledNavigation = styled.div`
 
   .logo {
     font-size: 2rem;
-    /* position: absolute;
-    left: 50%;
-    transform: translateX(-50%); */
   }
 
   Button {
     margin: 0.2em;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: ${({ theme }) => theme.mobile || '600px'}) {
     .menu-icon {
       display: block;
       cursor: pointer;
@@ -104,7 +99,7 @@ export const StyledNavigation = styled.div`
       z-index: 100;
       right: 0;
       top: 60px;
-      background-color: #B98389;
+      background-color: ${({ theme }) => theme.colors.baseHighlight || '#EFEAE6'};
       width: 0px;
       height: calc(100vh - 60px);
       transition: all 0.3s ease-in;

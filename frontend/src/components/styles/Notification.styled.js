@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 
 export const StyledNotification = styled.div`
-    background: #EFEAE6;
+    background: ${({ theme }) => theme.colors.baseHighlight || '#EFEAE6'};
     min-height: 55px;
     font-size: 20px;
     border-style: solid;

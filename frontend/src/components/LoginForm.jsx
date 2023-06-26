@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Button } from './styles/Button.styled'
 import { Form } from './styles/Form.styled'
 
@@ -10,8 +10,6 @@ const LoginForm = ({
   username,
   password,
 }) => {
-
-  const navigate = useNavigate()
 
   return (
     <Form>
@@ -39,7 +37,7 @@ const LoginForm = ({
         </div>
         <Button type="submit">Login</Button>
       </form>
-      <Button onClick={() => navigate('/signup')}>Sign up</Button>
+      <Link to='/signup'>Sign up</Link>
     </Form>
   )
 }

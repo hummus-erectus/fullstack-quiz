@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Button } from './styles/Button.styled'
 import { Form } from './styles/Form.styled'
 import signupService from '../services/signup'
@@ -10,7 +10,6 @@ import { useDispatch } from 'react-redux'
 const SignUpForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
@@ -59,8 +58,7 @@ const SignUpForm = () => {
         </div>
         <Button type='submit'>Sign up</Button>
       </form>
-      <Button onClick={() => navigate('/login')}>Login</Button>
-
+      <Link to='/login'>Login</Link>
     </Form>
   )
 }

@@ -1,28 +1,35 @@
 import styled from 'styled-components'
 
 export const Form = styled.div`
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+  a {
+    color: ${({ theme }) => theme.colors.primaryContent || '#000'};
+    text-decoration: none;
+    font-weight: 700;
+  }
 
-    .input {
-        font-weight: 600;
-        display: flex;
-        justify-content: space-between;
-        width: 300px;
-    }
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 
-    input {
-        background-color: ${({ theme }) => theme.colors.primary || '#FFF'};
-        color: ${({ theme }) => theme.colors.primaryContent || '#000'};
-        font-weight: 600;
-    }
+  .input {
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+  }
 
-    Button {
-        align-self: flex-start;
-    }
+  input {
+    background-color: ${({ theme }) => theme.colors.primary || '#FFF'};
+    color: ${({ theme }) => theme.colors.primaryContent || '#000'};
+    font-weight: 600;
+  }
+
+  Button {
+    align-self: flex-start;
+    margin-bottom: 16px;
+  }
 `

@@ -23,6 +23,13 @@ const UserPage = ({ removeLike, handleLogout }) => {
     fetchUser()
   }, [dispatch, user.id])
 
+  const confirmLogout = () => {
+    if (window.confirm('Are you sure you want to logout?')) {
+      handleLogout()
+      navigate('/')
+    }
+  }
+
   if (isLoading || !user) {
     return <p>Loading user data...</p>
   }
@@ -33,8 +40,7 @@ const UserPage = ({ removeLike, handleLogout }) => {
       <UserQuizList user={user}/>
       <LikedQuizList individualUser={user} removeLike={removeLike} editable/>
       <Button onClick={() => {
-        handleLogout()
-        navigate('/')
+        confirmLogout()
       }}>
         Logout
       </Button>

@@ -7,6 +7,24 @@ export const StyledNavigation = styled.div`
     height: 60px;
   }
 
+  .nav-elements {
+    display: block;
+    position: absolute;
+    z-index: 100;
+    right: 0;
+    top: 60px;
+    background-color: ${({ theme }) => theme.colors.baseHighlight || '#EFEAE6'};
+    width: 0px;
+    height: calc(100vh - 60px);
+    transition: all 0.3s ease-in;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .nav-elements.active {
+    width: 100%;
+  }
+
   .nav-container {
     max-width: 1100px;
     margin: 0 auto;
@@ -18,26 +36,22 @@ export const StyledNavigation = styled.div`
   }
 
   .menu-icon {
-    display: none;
-  }
-
-  .nav-elements {
-    display: flex;
+    display: block;
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.primaryContent || '#000'};
   }
 
   .nav-elements ul {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     list-style-type: none;
+    justify-content: space-between;
   }
 
   .nav-elements ul li {
     display: flex;
     align-items: center;
-  }
-
-  .nav-elements ul li:not(:last-child) {
-    margin-right: 40px;
+    margin-top: 22px;
   }
 
   .username {
@@ -54,24 +68,6 @@ export const StyledNavigation = styled.div`
     position: relative;
   }
 
-  /* .nav-elements ul a.active::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 0;
-    width: 800%;
-    height: 2px;
-    background-color: #69b3fd;
-  } */
-/*
-  span {
-    font-weight: 700;
-  }
-
-  p {
-    margin: 0;
-  } */
-
   a {
     color: ${({ theme }) => theme.colors.primaryContent || '#000'};
     text-decoration: none;
@@ -86,39 +82,35 @@ export const StyledNavigation = styled.div`
     margin: 0.2em;
   }
 
-  @media (max-width: ${({ theme }) => theme.mobile || '600px'}) {
+  @media (min-width: ${({ theme }) => theme.mobile || '600px'}) {
     .menu-icon {
-      display: block;
-      cursor: pointer;
-      color: ${({ theme }) => theme.colors.primaryContent || '#000'};
+      display: none;
     }
 
     .nav-elements {
-      display: block;
-      position: absolute;
-      z-index: 100;
-      right: 0;
-      top: 60px;
-      background-color: ${({ theme }) => theme.colors.baseHighlight || '#EFEAE6'};
-      width: 0px;
-      height: calc(100vh - 60px);
-      transition: all 0.3s ease-in;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-
-    .nav-elements.active {
-      width: 100%;
+      display: flex;
+      position: unset;
+      z-index: unset;
+      right: unset;
+      top: unset;
+      background-color: unset;
+      width: unset;
+      height: unset;
+      transition: unset;
+      overflow: unset;
+      white-space: unset;
     }
 
     .nav-elements ul {
-      display: flex;
-      flex-direction: column;
+      flex-direction: row;
     }
 
     .nav-elements ul li {
-      margin-right: unset;
-      margin-top: 22px;
+      margin-top: unset;
+    }
+
+    .nav-elements ul li:not(:last-child) {
+      margin-right: 40px;
     }
   }
 

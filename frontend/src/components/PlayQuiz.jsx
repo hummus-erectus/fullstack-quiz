@@ -3,6 +3,7 @@ import Togglable from './Togglable'
 import { Button } from './styles/Button.styled'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 import { useNavigate } from 'react-router-dom'
+import { StyledPlayQuiz } from './styles/PlayQuiz.styled'
 
 const PlayQuiz = ({ questions }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -206,6 +207,7 @@ const PlayQuiz = ({ questions }) => {
   const renderOptions = () => {
     return shuffledOptions.map((option, index) => (
       <Button
+        className='option-button'
         key={option._id}
         onClick={() => handleAnswerClick(option.optionId)}
         disabled={showFeedback}
@@ -280,18 +282,20 @@ const PlayQuiz = ({ questions }) => {
 
 
   return (
-    <div>
+    <StyledPlayQuiz>
       {currentQuestionIndex === -1 ? (
         renderResult()
       ) : (
         <>
           <h2>Question {currentQuestionIndex + 1}</h2>
           <p>{currentQuestion.content}</p>
-          {renderOptions()}
+          <div className='options-container'>
+            {renderOptions()}
+          </div>
           {showFeedback && renderFeedback()}
         </>
       )}
-    </div>
+    </StyledPlayQuiz>
   )
 }
 

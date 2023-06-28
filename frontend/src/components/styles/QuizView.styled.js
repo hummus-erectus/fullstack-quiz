@@ -22,6 +22,7 @@ export const StyledQuizView = styled.div`
 
   .commentsContainer {
     margin-top: 30px;
+    margin-bottom: 30px;
   }
 
   .userComment {

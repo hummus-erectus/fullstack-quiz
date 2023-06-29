@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = '/api/users'
+const baseUrl = 'https://quizapp.fly.dev/api/users'
 
 const getAll = async () => {
   const response = await axios.get(baseUrl)

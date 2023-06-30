@@ -38,6 +38,7 @@ const theme = {
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
   const dispatch = useDispatch()
   const quizzes = useSelector(({ quiz }) => quiz)
@@ -45,11 +46,18 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeUsers())
-    const loggedUserJSON = window.localStorage.getItem('loggedQuizUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      dispatch(userLogin(user))
+
+    const initializeApp = async () => {
+      const loggedUserJSON = window.localStorage.getItem('loggedQuizUser')
+      if (loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON)
+        dispatch(userLogin(user))
+        tokenService.setToken(user.token)
+      }
+      setIsLoading(false) // Set loading state to false after user state is initialized
     }
+
+    initializeApp()
   }, [dispatch])
 
   const handleLogin = async (event) => {
@@ -132,54 +140,60 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <>
-        <GlobalStyles />
-        <Navigation user={user} />
-        <Notification />
-        <Container>
+        {isLoading ? ( // Render a loading state if still initializing user state
+          <div>Loading...</div>
+        ) : (
           <>
-            <Routes>
-              <Route path='/' element={<QuizHome />}/>
-              <Route
-                path='/mypage'
-                element={
-                  user ? (
-                    <UserPage removeLike={removeLike} handleLogout={handleLogout}/>
-                  ) : (
-                    <Navigate to='/login' replace />
-                  )
-                }
-              />
-              <Route path='/users' element={<Users />}/>
-              <Route path='/users/:userId' element={<User />}/>
-              <Route path='/quizzes/:quizId' element={
-                <QuizView
-                  deleteQuiz={deleteQuiz}
-                  addQuestion={addQuestion}
-                  updateQuestion={updateQuestion}
-                  removeQuestion={removeQuestion}
-                />
-              }/>
-              <Route
-                path="/login"
-                element={user ? <Navigate to="/" replace /> :
-                  <LoginForm
-                    username={username}
-                    password={password}
-                    handleUsernameChange={({ target }) => setUsername(target.value)}
-                    handlePasswordChange={({ target }) => setPassword(target.value)}
-                    handleSubmit={handleLogin}
+            <GlobalStyles />
+            <Navigation user={user} />
+            <Notification />
+            <Container>
+              <>
+                <Routes>
+                  <Route path='/' element={<QuizHome />}/>
+                  <Route
+                    path='/mypage'
+                    element={
+                      user ? (
+                        <UserPage removeLike={removeLike} handleLogout={handleLogout}/>
+                      ) : (
+                        <Navigate to='/login' replace />
+                      )
+                    }
                   />
-                }
-              />
-              <Route
-                path="/signup"
-                element={user ? <Navigate to="/" replace /> : <SignUpForm />}
-              />
-              <Route path="*" element={<Navigate to="/404" replace />} />
-              <Route path="/404" element={<NotFound />} />
-            </Routes>
+                  <Route path='/users' element={<Users />}/>
+                  <Route path='/users/:userId' element={<User />}/>
+                  <Route path='/quizzes/:quizId' element={
+                    <QuizView
+                      deleteQuiz={deleteQuiz}
+                      addQuestion={addQuestion}
+                      updateQuestion={updateQuestion}
+                      removeQuestion={removeQuestion}
+                    />
+                  }/>
+                  <Route
+                    path="/login"
+                    element={user ? <Navigate to="/" replace /> :
+                      <LoginForm
+                        username={username}
+                        password={password}
+                        handleUsernameChange={({ target }) => setUsername(target.value)}
+                        handlePasswordChange={({ target }) => setPassword(target.value)}
+                        handleSubmit={handleLogin}
+                      />
+                    }
+                  />
+                  <Route
+                    path="/signup"
+                    element={user ? <Navigate to="/" replace /> : <SignUpForm />}
+                  />
+                  <Route path="*" element={<Navigate to="/404" replace />} />
+                  <Route path="/404" element={<NotFound />} />
+                </Routes>
+              </>
+            </Container>
           </>
-        </Container>
+        )}
       </>
     </ThemeProvider>
   )

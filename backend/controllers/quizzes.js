@@ -147,7 +147,7 @@ quizzesRouter.delete('/:id', async (request, response) => {
 
     await Promise.all(updatePromises);
 
-    await quiz.remove();
+    await quiz.deleteOne();
 
     response.status(204).end();
   } catch (error) {

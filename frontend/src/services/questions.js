@@ -1,6 +1,6 @@
 import axios from 'axios'
 import tokenService from './tokenService'
-const baseUrl = 'https://quizapp.fly.dev/api/questions'
+const baseUrl = '/api/questions'
 
 
 

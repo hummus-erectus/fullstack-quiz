@@ -2,8 +2,6 @@ import axios from 'axios'
 import tokenService from './tokenService'
 const baseUrl = 'https://quizapp.fly.dev/api/quizzes'
 
-
-
 const getAll = async () => {
   const response = await axios.get(baseUrl)
   return response.data

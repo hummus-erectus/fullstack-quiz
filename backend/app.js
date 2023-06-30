@@ -1,6 +1,7 @@
 const config = require('./utils/config')
 const express = require('express')
 require('express-async-errors')
+const path = require('path');
 const app = express()
 const cors = require('cors')
 const quizzesRouter = require('./controllers/quizzes')
@@ -26,6 +27,7 @@ mongoose
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('build'))
 app.use(middleware.requestLogger)
 app.use(middleware.tokenExtractor)
 
@@ -39,7 +41,11 @@ if (process.env.NODE_ENV === 'test') {
   app.use('/api/testing', testingRouter)
 }
 
-app.use(middleware.unknownEndpoint);
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+});
+
+// app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler)
 
 module.exports = app

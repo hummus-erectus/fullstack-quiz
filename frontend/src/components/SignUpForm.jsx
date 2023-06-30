@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from './styles/Button.styled'
 import { Form } from './styles/Form.styled'
 import signupService from '../services/signup'
@@ -12,6 +12,7 @@ const SignUpForm = () => {
   const [password, setPassword] = useState('')
 
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -19,6 +20,7 @@ const SignUpForm = () => {
     try {
       await signupService.signup({ username, password })
       dispatch(setNotification(`${username} successfully signed up!`, 'success', 5))
+      navigate('/login')
     } catch (error) {
       dispatch(setNotification(error.message, 'error', 5))
     }

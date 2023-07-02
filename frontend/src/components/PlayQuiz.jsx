@@ -246,36 +246,39 @@ const PlayQuiz = ({ questions }) => {
     const incorrectAnswers = userAnswers.filter((answer) => !answer.isCorrect)
 
     return (
-      <div>
-        <p>Your score: {score}/{totalQuestions}</p>
-
-        <Button onClick={handleRetryQuiz}>Retry Quiz</Button>
-        <Button onClick={handleNewQuiz}>New Quiz</Button>
-
-        {incorrectAnswers.length > 0 && (
-          <div>
-            <Togglable buttonLabel="See Incorrect Answers" ref={togglableRef}>
-              {incorrectAnswers.map((answer) => {
-                const question = questions.find((q) => q._id === answer.questionId)
-                const selectedOption = question.options.find(
-                  (option) => option.optionId === answer.optionId
-                )
-                const correctOption = question.options.find(
-                  (option) => option.optionId === question.correctAnswer
-                )
-
-                return (
-                  <div key={question._id}>
-                    <h3>Question: {question.content}</h3>
-                    <p>Your answer: {selectedOption.content}</p>
-                    <p>Correct answer: {correctOption.content}</p>
-                  </div>
-                )
-              })}
-            </Togglable>
-
+      <div className='results-container'>
+        <p className='results-announce'>Your score: <span className='score'>{score}/{totalQuestions}</span></p>
+        <div className='action-btn-container'>
+          <div className='retry-and-new-btn-container'>
+            <Button onClick={handleRetryQuiz}>Retry Quiz</Button>
+            <Button onClick={handleNewQuiz}>New Quiz</Button>
           </div>
-        )}
+          {incorrectAnswers.length > 0 && (
+            <div className='incorrect-answers-btn'>
+              <Togglable buttonLabel="See Incorrect Answers" ref={togglableRef}>
+                {incorrectAnswers.map((answer) => {
+                  const question = questions.find((q) => q._id === answer.questionId)
+                  const selectedOption = question.options.find(
+                    (option) => option.optionId === answer.optionId
+                  )
+                  const correctOption = question.options.find(
+                    (option) => option.optionId === question.correctAnswer
+                  )
+
+                  return (
+                    <div key={question._id}>
+                      <h3>Question: {question.content}</h3>
+                      <p>Your answer: {selectedOption.content}</p>
+                      <p>Correct answer: {correctOption.content}</p>
+                    </div>
+                  )
+                })}
+              </Togglable>
+            </div>
+          )}
+        </div>
+
+
       </div>
     )
   }

@@ -25,5 +25,4 @@ export const StyledNotification = styled.div`
             transform: translate(-50%, 0);
         }
     }
-    // Can a fadeOut animation be added without changing the underlying js code?
 `

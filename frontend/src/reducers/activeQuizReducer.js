@@ -56,7 +56,6 @@ export const newLike = (id) => {
       const updatedQuiz = await quizService.addLike(id)
       dispatch(setQuiz(updatedQuiz))
     } catch (error) {
-      // Handle error
       console.log('Error adding like:', error)
     }
   }
@@ -68,7 +67,6 @@ export const unLike = (id) => {
       const updatedQuiz = await quizService.removeLike(id)
       dispatch(setQuiz(updatedQuiz))
     } catch (error) {
-      // Handle error
       console.log('Error removing like:', error)
     }
   }
@@ -80,7 +78,6 @@ export const newComment = (id, content) => {
       const addedComment = await quizService.createComment(id, { content: content })
       dispatch(setQuiz(addedComment))
     } catch (error) {
-      // Handle error
       console.log('Error adding comment:', error)
     }
   }
@@ -92,7 +89,6 @@ export const updateQuiz = (id, changedQuiz) => {
       const updatedQuiz = await quizService.update(id, changedQuiz)
       dispatch(update({ id, changedQuiz: updatedQuiz }))
     } catch (error) {
-      // Handle error, e.g., display a notification or show an error message
       console.log('Error updating quiz:', error)
     }
   }

@@ -54,7 +54,7 @@ const App = () => {
         dispatch(userLogin(user))
         tokenService.setToken(user.token)
       }
-      setIsLoading(false) // Set loading state to false after user state is initialized
+      setIsLoading(false)
     }
 
     initializeApp()
@@ -140,7 +140,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <>
-        {isLoading ? ( // Render a loading state if still initializing user state
+        {isLoading ? (
           <div>Loading...</div>
         ) : (
           <>

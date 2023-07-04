@@ -16,4 +16,3 @@ export const ButtonAlt = styled.button`
         transform: scale(0.98);
     }
 `
-// Reuses code from regular styled button. Could have one component that checks if a prop is provided for color and falls back to the theme and finally to the default color

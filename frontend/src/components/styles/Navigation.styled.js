@@ -62,12 +62,6 @@ export const StyledNavigation = styled.div`
     font-weight: 400;
   }
 
-  .nav-elements ul a.active {
-    color: #B98389;
-    font-weight: 500;
-    position: relative;
-  }
-
   a {
     color: ${({ theme }) => theme.colors.primaryContent || '#000'};
     text-decoration: none;

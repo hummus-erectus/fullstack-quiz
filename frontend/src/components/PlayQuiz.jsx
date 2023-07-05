@@ -264,7 +264,6 @@ const PlayQuiz = ({ questions }) => {
                   const correctOption = question.options.find(
                     (option) => option.optionId === question.correctAnswer
                   )
-
                   return (
                     <div key={question._id}>
                       <h3>Question: {question.content}</h3>
@@ -277,8 +276,6 @@ const PlayQuiz = ({ questions }) => {
             </div>
           )}
         </div>
-
-
       </div>
     )
   }

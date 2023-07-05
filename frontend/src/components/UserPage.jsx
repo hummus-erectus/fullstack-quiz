@@ -19,7 +19,6 @@ const UserPage = ({ removeLike, handleLogout }) => {
       await dispatch(updateUser(user.id))
       setIsLoading(false)
     }
-
     fetchUser()
   }, [dispatch, user.id])
 
